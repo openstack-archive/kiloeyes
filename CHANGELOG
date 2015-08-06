@@ -1,0 +1,7 @@
+kiloeyes (1.0)
+
+    * Initial project setup
+      Choose framework of wsgiref, pasteDeploy, falcon.
+      The server will be wsgiref server like any other OpenStack server
+      Use PasteDeploy to allow WSGI pipelines
+      Use Falcon framework to implement ReSTful API services
