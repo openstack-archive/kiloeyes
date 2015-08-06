@@ -1,0 +1,15 @@
+sessionname kiloeyes
+hardstatus alwayslastline '%{= .} %-Lw%{= .}%> %n%f %t*%{= .}%+Lw%< %-=%{g}(%{d}%H/%l%{g})'
+setenv PROMPT_COMMAND /bin/true
+screen -t bash 0
+screen -t api bash
+stuff "gunicorn -k eventlet --worker-connections=20 --backlog=10 --paste /etc/kiloeyes/kiloeyes.ini^M"
+screen -t metric-persister bash
+stuff " kiloeyes-service --config-file /etc/kiloeyes/metrics-persister.conf^M"
+screen -t alarm-persister bash
+stuff " kiloeyes-service --config-file /etc/kiloeyes/alarms-persister.conf^M"
+screen -t notification-engine bash
+stuff "kiloeyes-service --config-file /etc/kiloeyes/kiloeyes-notification-engine.conf^M"
+screen -t threshold-engine bash
+stuff "kiloeyes-service --config-file /etc/kiloeyes/kiloeyes-threshold-engine.conf^M"
+select 1

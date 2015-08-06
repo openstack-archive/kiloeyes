@@ -1,0 +1,164 @@
+{
+  "alarm_def_0": {
+    "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+    "name": "Average CPU percent greater than 10",
+    "description": "The average CPU percent is greater than 10",
+    "expression": "max(-_.千幸福的笑脸{घोड़ा=馬,  dn2=dv2,千幸福的笑脸घ=千幸福的笑脸घ}) gte 100 times 1 And (min(ເຮືອນ{dn3=dv3,家=дом}) < 10 or sum(biz{dn5=dv58}) >9 9and count(fizzle) lt 0 or count(baz) > 1)",
+    "match_by": [],
+    "severity": "LOW",
+    "ok_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "alarm_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "undetermined_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ]
+  },
+  "alarm_def_0_wrong_0": {
+    "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+    "name": "Average CPU percent greater than 10",
+    "description": "The average CPU percent is greater than 10",
+    "expression": "max(-_.千幸福的笑脸{घोड़ा=馬,  dn2=dv2,千幸福的笑脸घ=千幸福的笑脸घ}) gte 100 times 1 And (min(ເຮືອນ{dn3=dv3,家=дом}) < 10 or sum(biz{dn5=dv58}) >9 9and count(fizzle) lt 0 or count(baz) > 1)",
+    "match_by": [],
+    "severity": "LOW",
+    "ok_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "alarm_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ]
+  },
+  "alarm_def_0_wrong_1": {
+    "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+    "name": "Average CPU percent greater than 10",
+    "description": "The average CPU percent is greater than 10",
+    "expression": "max(-_.千幸福的笑脸{घोड़ा=馬,  dn2=dv2,千幸福的笑脸घ=千幸福的笑脸घ}) gte 100 times 1 And (min(ເຮືອນ{dn3=dv3,家=дом}) < 10 or sum(biz=5{dn5=dv58}) >9 9and count(fizzle) lt 0 or count(baz) > 1)",
+    "match_by": [],
+    "severity": "LOW",
+    "ok_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "alarm_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "undetermined_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ]
+  },
+  "alarm_def_1": {
+    "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+    "name": "Average CPU percent greater than 10",
+    "description": "The average CPU percent is greater than 10",
+    "expression": "max(biz{key2=value2})>1400",
+    "match_by": [
+      "hostname"
+    ],
+    "severity": "LOW",
+    "ok_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "alarm_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "undetermined_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ]
+  },
+  "alarm_def_1_update": {
+    "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+    "name": "Average CPU percent greater than 10",
+    "description": "The average CPU percent is greater than 10",
+    "expression": "min(biz{key2=value2})<1450",
+    "match_by": [
+      "hostname"
+    ],
+    "severity": "LOW",
+    "ok_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "alarm_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "undetermined_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ]
+  },
+  "alarm_def_1_update_wrong_0": {
+    "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+    "name": "Average CPU percent greater than 10",
+    "description": "The average CPU percent is greater than 10",
+    "expression": "min(biz{key2=value1})<1450",
+    "match_by": [
+      "hostname"
+    ],
+    "severity": "LOW",
+    "ok_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "alarm_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "undetermined_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ]
+  },
+  "alarm_def_1_update_wrong_1": {
+    "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+    "name": "Average CPU percent greater than 10",
+    "description": "The average CPU percent is greater than 10",
+    "expression": "min(biz{key2=value2})<1450",
+    "match_by": [
+      "os"
+    ],
+    "severity": "LOW",
+    "ok_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "alarm_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "undetermined_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ]
+  },
+  "alarm_def_1_update_wrong_2": {
+    "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+    "name": "Average CPU percent greater than 10",
+    "description": "The average CPU percent is greater than 10",
+    "expression": "min(biz{key2=value2})<1450 and max(baz)<500",
+    "match_by": [
+      "hostname"
+    ],
+    "severity": "LOW",
+    "ok_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "alarm_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "undetermined_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ]
+  },
+  "alarm_def_1_update_wrong_3": {
+    "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+    "name": "Average CPU percent greater than 10",
+    "description": "The average CPU percent is greater than 10",
+    "expression": "min(baz{key2=value2})<1450",
+    "match_by": [
+      "hostname"
+    ],
+    "severity": "LOW",
+    "ok_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "alarm_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ],
+    "undetermined_actions": [
+      "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+    ]
+  }
+}

@@ -1,0 +1,828 @@
+{
+  "alarm_def": {
+    "alarm_def_utf8": {
+      "alarm_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "ok_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "name": "alarm definition for test",
+      "severity": "LOW",
+      "undetermined_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "match_by": [],
+      "expression": "max(-_.\u5343\u5e78\u798f\u7684\u7b11\u8138{\u0918\u094b\u0921\u093c\u093e=\u99ac,  dn2=dv2,\u5343\u5e78\u798f\u7684\u7b11\u8138\u0918=\u5343\u5e78\u798f\u7684\u7b11\u8138\u0918}) gte 100 times 1 And (min(\u0ec0\u0eae\u0eb7\u0ead\u0e99{dn3=dv3,\u5bb6=\u0434\u043e\u043c}) < 10 or sum(biz{dn5=dv58}) >9 9and count(fizzle) lt 0 or count(baz) > 1)",
+      "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+      "description": "the definition used for testing thresh processor"
+    },
+    "alarm_def_match_by": {
+      "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+      "name": "alarm definition for test",
+      "description": "the definition used for testing thresh processor",
+      "expression": "max(biz{key2=value2})>1400",
+      "match_by": [
+        "hostname"
+      ],
+      "severity": "LOW",
+      "ok_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "alarm_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "undetermined_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ]
+    },
+    "alarm_def_match_by_update": {
+      "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+      "name": "alarm definition for test",
+      "description": "the definition used for testing thresh processor",
+      "expression": "min(biz{key2=value2})<1450",
+      "match_by": [
+        "hostname"
+      ],
+      "severity": "LOW",
+      "ok_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "alarm_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "undetermined_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ]
+    },
+    "alarm_def_count": {
+      "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+      "name": "alarm definition for test",
+      "description": "the definition used for testing thresh processor",
+      "expression": "count(biz{key2=value2})>3",
+      "match_by": [
+        "hostname"
+      ],
+      "severity": "LOW",
+      "ok_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "alarm_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "undetermined_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ]
+    },
+    "alarm_def_more_dimensions": {
+      "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+      "name": "alarm definition for test",
+      "description": "the definition used for testing thresh processor",
+      "expression": "avg(biz{key2=value2})>1400",
+      "match_by": [
+        "hostname"
+      ],
+      "severity": "LOW",
+      "ok_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "alarm_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "undetermined_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ]
+    },
+    "alarm_def_periods": {
+      "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+      "name": "alarm definition for test",
+      "description": "the definition used for testing thresh processor",
+      "expression": "max(foo)>=100 times 4",
+      "match_by": [],
+      "severity": "LOW",
+      "ok_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "alarm_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "undetermined_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ]
+    },
+    "alarm_def_periods_update": {
+      "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+      "name": "alarm definition for test",
+      "description": "the definition used for testing thresh processor",
+      "expression": "max(foo,80)>=100 times 6",
+      "match_by": [],
+      "severity": "LOW",
+      "ok_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "alarm_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "undetermined_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ]
+    },
+    "alarm_def_wrong": {
+      "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+      "name": "alarm definition for test",
+      "description": "the definition used for testing thresh processor",
+      "expression": "max(foo{hostname=mini-mon,千=千}, 120) = 100 and (max(bar)>100  or max(biz)>100)",
+      "match_by": [],
+      "severity": "LOW",
+      "ok_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "alarm_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "undetermined_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ]
+    },
+    "alarm_def_multi_match_by": {
+      "id": "f9935bcc-9641-4cbf-8224-0993a947ea83",
+      "name": "alarm definition for test",
+      "description": "the definition used for testing thresh processor",
+      "expression": "avg(biz{key2=value2})>1400",
+      "match_by": [
+        "hostname",
+        "system"
+      ],
+      "severity": "LOW",
+      "ok_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "alarm_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ],
+      "undetermined_actions": [
+        "c60ec47e-5038-4bf1-9f95-4046c6e9a759"
+      ]
+    }
+  },
+  "metrics": {
+    "metrics_periods_0": [
+      {
+        "time_offset": -140,
+        "name": "foo",
+        "value": 0,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -120,
+        "name": "foo",
+        "value": 10,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -100,
+        "name": "foo",
+        "value": 20,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -80,
+        "name": "foo",
+        "value": 30,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -60,
+        "name": "foo",
+        "value": 40,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -40,
+        "name": "foo",
+        "value": 50,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -20,
+        "name": "foo",
+        "value": 60,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "foo",
+        "value": 70,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": 20,
+        "name": "foo",
+        "value": 80,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": 40,
+        "name": "foo",
+        "value": 90,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      }
+    ],
+    "metrics_periods_1": [
+      {
+        "time_offset": -370,
+        "name": "foo",
+        "value": 750,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -350,
+        "name": "foo",
+        "value": 825,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -330,
+        "name": "foo",
+        "value": 900,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -310,
+        "name": "foo",
+        "value": 975,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -290,
+        "name": "foo",
+        "value": 1050,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -270,
+        "name": "foo",
+        "value": 1125,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -250,
+        "name": "foo",
+        "value": 1200,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -230,
+        "name": "foo",
+        "value": 1275,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -210,
+        "name": "foo",
+        "value": 1350,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -190,
+        "name": "foo",
+        "value": 1425,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -170,
+        "name": "foo",
+        "value": 1500,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -150,
+        "name": "foo",
+        "value": 1575,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -130,
+        "name": "foo",
+        "value": 1650,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -110,
+        "name": "foo",
+        "value": 1725,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -90,
+        "name": "foo",
+        "value": 1800,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -70,
+        "name": "foo",
+        "value": 1875,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -50,
+        "name": "foo",
+        "value": 1950,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -30,
+        "name": "foo",
+        "value": 2025,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -10,
+        "name": "foo",
+        "value": 2100,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": 10,
+        "name": "foo",
+        "value": 2175,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      }
+    ],
+    "metrics_periods_2": [
+      {
+        "time_offset": -140,
+        "name": "foo",
+        "value": 200,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -120,
+        "name": "foo",
+        "value": 210,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -100,
+        "name": "foo",
+        "value": 220,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -80,
+        "name": "foo",
+        "value": 230,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -60,
+        "name": "foo",
+        "value": 240,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -40,
+        "name": "foo",
+        "value": 250,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": -20,
+        "name": "foo",
+        "value": 260,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "foo",
+        "value": 270,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": 20,
+        "name": "foo",
+        "value": 280,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      },
+      {
+        "time_offset": 40,
+        "name": "foo",
+        "value": 290,
+        "dimensions": {
+          "key2": "value2",
+          "key1": "value1"
+        }
+      }
+    ],
+    "metrics_match_by": [
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 1300,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h1"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 1500,
+        "dimensions": {
+          "key3": "value3",
+          "key2": "value2",
+          "key1": "value1",
+          "hostname": "h1"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 1500,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h2"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 1200,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h3"
+        }
+      }
+    ],
+    "metrics_count_alarm": [
+      {
+        "time_offset": -35,
+        "name": "biz",
+        "value": 1300,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h1"
+        }
+      },
+      {
+        "time_offset": -30,
+        "name": "biz",
+        "value": 1200,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h1"
+        }
+      },
+      {
+        "time_offset": -20,
+        "name": "biz",
+        "value": 1200,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h1"
+        }
+      },
+      {
+        "time_offset": -10,
+        "name": "biz",
+        "value": 1200,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h1"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 1601,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h1"
+        }
+      }
+    ],
+    "metrics_count_ok": [
+      {
+        "time_offset": -40,
+        "name": "biz",
+        "value": 1300,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h1"
+        }
+      }
+    ],
+    "metrics_more_dimensions": [
+      {
+        "time_offset": -200,
+        "name": "biz",
+        "value": 1300,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h1"
+        }
+      },
+      {
+        "time_offset": -30,
+        "name": "biz",
+        "value": 1200,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h1"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 1601,
+        "dimensions": {
+          "key3": "value3",
+          "key2": "value2",
+          "key1": "value1",
+          "hostname": "h1"
+        }
+      }
+    ],
+    "metrics_multi_match_by": [
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 2000,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h1"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 1300,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h1",
+          "system": "windows"
+        }
+      },
+      {
+        "time_offset": -30,
+        "name": "biz",
+        "value": 1200,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h1",
+          "system": "linux"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 1601,
+        "dimensions": {
+          "key3": "value3",
+          "key2": "value2",
+          "key1": "value1",
+          "hostname": "h1",
+          "system": "windows"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 1601,
+        "dimensions": {
+          "key3": "value3",
+          "key2": "value2",
+          "key1": "value1",
+          "hostname": "h2",
+          "system": "linux"
+        }
+      }
+    ],
+    "metrics_utf8": [
+      {
+        "time_offset": 0,
+        "name": "baz",
+        "value": 1500,
+        "dimensions": {
+          "\u0918\u094b\u0921\u093c\u093e": "\u99ac",
+          "\u5343\u5e78\u798f\u7684\u7b11\u8138\u0918": "\u5343\u5e78\u798f\u7684\u7b11\u8138\u0918",
+          "dn2": "dv2"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "-_.\u5343\u5e78\u798f\u7684\u7b11\u8138",
+        "value": 1500,
+        "dimensions": {
+          "\u0918\u094b\u0921\u093c\u093e": "\u99ac",
+          "\u5343\u5e78\u798f\u7684\u7b11\u8138\u0918": "\u5343\u5e78\u798f\u7684\u7b11\u8138\u0918",
+          "dn2": "dv2"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "\u0ec0\u0eae\u0eb7\u0ead\u0e99",
+        "value": 5,
+        "dimensions": {
+          "\u5bb6": "\u0434\u043e\u043c",
+          "dn3": "dv3"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 5,
+        "dimensions": {
+          "dn5": "dv58"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 95,
+        "dimensions": {
+          "dn5": "dv58"
+        }
+      }
+    ],
+    "metrics_match_by_wrong": [
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 1300,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h1"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "dimensions": {
+          "key3": "value3",
+          "key2": "value2",
+          "key1": "value1",
+          "hostname": "h1"
+        }
+      }
+    ],
+    "metrics_not_match": [
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 1300,
+        "dimensions": {
+          "key2": "value2",
+          "hostname": "h1"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 15000,
+        "dimensions": {
+          "key3": "value3",
+          "key1": "value1",
+          "hostname": "h1"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 15000,
+        "dimensions": {
+          "key3": "value3",
+          "key2": "value1",
+          "hostname": "h1"
+        }
+      },
+      {
+        "time_offset": 0,
+        "name": "biz",
+        "value": 15000,
+        "dimensions": {
+          "key3": "value3",
+          "key2": "value1"
+        }
+      }
+    ]
+  }
+}
