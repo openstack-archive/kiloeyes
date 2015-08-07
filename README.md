@@ -1,5 +1,5 @@
 Kiloeyes
-=======
+========
 
 Kiloeyes is a monitoring software allowing you to collect data from any compute
 systems.
@@ -36,7 +36,7 @@ ElasticSearch::
     https://www.elastic.co/products/elasticsearch
 
 Install Kiloeyes
-===============
+================
 Get the source code::
 
     git clone https://github.com/openstack/kiloeyes.git
@@ -97,7 +97,7 @@ command from kiloeyes root direction:
 
 
 Kiloeyes Integration with OpenStack Horizon
-==========================================
+===========================================
 To integrate with Horizon, two projects (monasca-ui and python-monascaclient)
 have to be installed. The steps on how to install these two projects can be
 found here::
@@ -115,7 +115,7 @@ Once both projects are installed, some configurations are needed:
 
 
 Kiloeyes Development
-===================
+====================
 To check if the code follows python coding style, run the following command
 from the root directory of this project
 
@@ -131,6 +131,7 @@ directory of the project
 
     ./run_tests.sh -c
 
-If the command runs successfully, then set of files will be created in the root
+If the command runs successfully, a set of files will be created in the root
 directory named covhtml. Open up the index.html from a browser to see the summary
 of the unit test coverage and the details.
+
