@@ -1,0 +1,8 @@
+Verified+2: Jenkins
+Code-Review+2: Sahdev Zala <spzala@us.ibm.com>
+Workflow+1: Sahdev Zala <spzala@us.ibm.com>
+Submitted-by: Jenkins
+Submitted-at: Fri, 07 Aug 2015 17:58:44 +0000
+Reviewed-on: https://review.openstack.org/210106
+Project: openstack/kiloeyes
+Branch: refs/heads/master
