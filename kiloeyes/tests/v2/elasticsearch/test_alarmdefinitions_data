@@ -1,0 +1,82 @@
+{
+    "hits":{
+        "hits":[
+            {
+                "_score":1.0,
+                "_type":"alarmdefinitions",
+                "_id":"8c85be40-bfcb-465c-b450-4eea670806a6",
+                "_source":{
+                    "id":"8c85be40-bfcb-465c-b450-4eea670806a6",
+                    "name":"CPU usage test",
+                    "alarm_actions":
+                    "c60ec47e-5038-4bf1-9f95-4046c6e9a719",
+                    "undetermined_actions":
+                    "c60ec47e-5038-4bf1-9t95-4046c6e9a759",
+                    "ok_actions":
+                    "c60ec47e-5038-4bf1-9f95-4046cte9a759",
+                    "match_by":"hostname",
+                    "severity":"LOW",
+                    "expression":
+                    "max(cpu.usage{os=linux},600)>15",
+                    "expression_data": [
+                        {
+                            "function": "AVG",
+                            "metric_name": "cpu.avg.lt.10",
+                            "period": "6000",
+                            "threshold": "10",
+                            "periods": "1",
+                            "operator": "LTE",
+                            "dimensions": {
+                                "os": "linux"
+                            }
+                        }
+                    ],
+                    "description": "Max CPU 15"
+                },
+                "_index":"data_20150601000000"
+            },
+            {
+                "_score":1.0,
+                "_type":"alarmdefinitions",
+                "_id":"eb43fe12-b442-40b6-aab6-f34450cf90dd",
+                "_source":{
+                    "id":"eb43fe12-b442-40b6-aab6-f34450cf90dd",
+                    "name":"CPU usage in last 4 minutes",
+                    "alarm_actions":
+                    "c60ec47e-5038-4bf1-9f95-4046c6e9a719",
+                    "undetermined_actions":
+                    "c60ec47e-5038-4bf1-9t95-4046c6e9a759",
+                    "ok_actions":
+                    "c60ec47e-5038-4bf1-9f95-4046cte9a759",
+                    "match_by":"hostname",
+                    "severity":"LOW",
+                    "expression":
+                    "max(cpu.usage,60)>10 times 4",
+                    "expression_data": [
+                        {
+                            "function": "AVG",
+                            "metric_name": "cpu.avg.lt.10",
+                            "period": "6000",
+                            "threshold": "10",
+                            "periods": "1",
+                            "operator": "LTE",
+                            "dimensions": {
+                                "os": "linux"
+                            }
+                        }
+                    ],
+                    "description": "max CPU greater than 10"
+                },
+                "_index":"data_20150601000000"
+            }
+        ],
+        "total":2,
+        "max_score":1.0
+    },
+    "_shards":{
+        "successful":5,
+        "failed":0,
+        "total":5
+    },
+    "took":2
+}
