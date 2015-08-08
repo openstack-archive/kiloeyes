@@ -16,7 +16,7 @@ import email.mime.text
 from oslo_config import cfg
 import smtplib
 
-from kiloeyes.openstack.common import log
+from oslo_log import log
 
 MAILSENDER_OPTS = [
     cfg.StrOpt('username',

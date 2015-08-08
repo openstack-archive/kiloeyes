@@ -14,10 +14,10 @@
 
 import email.mime.text
 import mock
+from oslo_log import log
 import smtplib
 
 from kiloeyes.common import email_sender
-from kiloeyes.openstack.common import log
 from kiloeyes import tests
 
 LOG = log.getLogger(__name__)

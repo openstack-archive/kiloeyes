@@ -14,10 +14,11 @@
 # under the License.
 
 import json
-from kiloeyes.common import alarm_expr_validator as validator
-from kiloeyes.openstack.common import log
-from kiloeyes import tests
 import os
+from oslo_log import log
+
+from kiloeyes.common import alarm_expr_validator as validator
+from kiloeyes import tests
 
 LOG = log.getLogger(__name__)
 

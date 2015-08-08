@@ -22,7 +22,7 @@ from eventlet import event
 from eventlet import greenthread
 
 from kiloeyes.openstack.common.gettextutils import _LE, _LW
-from kiloeyes.openstack.common import log as logging
+from oslo_log import log as logging
 
 LOG = logging.getLogger(__name__)
 

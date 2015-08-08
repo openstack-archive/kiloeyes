@@ -17,7 +17,7 @@ import hashlib
 import json
 import time
 
-from kiloeyes.openstack.common import log
+from oslo_log import log
 
 LOG = log.getLogger(__name__)
 

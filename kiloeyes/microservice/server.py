@@ -14,10 +14,10 @@
 # under the License.
 
 from oslo_config import cfg
+from oslo_log import log
 from stevedore import driver
 
 from kiloeyes.common import namespace
-from kiloeyes.openstack.common import log
 from kiloeyes.openstack.common import service as os_service
 from kiloeyes import service
 

@@ -26,7 +26,7 @@ try:
 except ImportError:
     import json
 
-from kiloeyes.openstack.common import log
+from oslo_log import log
 
 
 KAFKA_OPTS = [

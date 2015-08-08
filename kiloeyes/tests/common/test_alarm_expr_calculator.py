@@ -12,11 +12,12 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from kiloeyes.common import alarm_expr_calculator as calculator
-from kiloeyes.openstack.common import log
-from kiloeyes import tests
+from oslo_log import log
 import random
 import time
+
+from kiloeyes.common import alarm_expr_calculator as calculator
+from kiloeyes import tests
 
 
 LOG = log.getLogger(__name__)

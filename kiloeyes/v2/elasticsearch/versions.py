@@ -16,7 +16,7 @@ import datetime
 import falcon
 
 from kiloeyes.common import resource_api
-from kiloeyes.openstack.common import log
+from oslo_log import log
 
 try:
     import ujson as json

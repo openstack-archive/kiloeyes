@@ -24,7 +24,7 @@ from kiloeyes.common import alarm_expr_validator
 from kiloeyes.common import es_conn
 from kiloeyes.common import namespace
 from kiloeyes.common import resource_api
-from kiloeyes.openstack.common import log
+from oslo_log import log
 
 
 try:

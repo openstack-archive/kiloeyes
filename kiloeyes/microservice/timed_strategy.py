@@ -18,7 +18,7 @@ import dateutil.parser as dparser
 from oslo_config import cfg
 import time
 
-from kiloeyes.openstack.common import log
+from oslo_log import log
 
 
 """

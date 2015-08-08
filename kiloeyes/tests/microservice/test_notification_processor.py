@@ -15,10 +15,10 @@
 import ast
 import json
 import mock
+from oslo_log import log
 
 from kiloeyes.common import email_sender
 from kiloeyes.microservice import notification_processor
-from kiloeyes.openstack.common import log
 from kiloeyes import tests
 
 LOG = log.getLogger(__name__)

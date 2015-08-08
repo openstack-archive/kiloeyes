@@ -30,7 +30,7 @@ import greenlet
 from oslo_config import cfg
 
 from kiloeyes.openstack.common.gettextutils import _LI
-from kiloeyes.openstack.common import log as logging
+from oslo_log import log as logging
 
 help_for_backdoor_port = (
     "Acceptable values are 0, <port>, and <start>:<end>, where 0 results "

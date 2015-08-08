@@ -13,16 +13,15 @@
 # under the License.
 
 import os
-from wsgiref import simple_server
-
 from oslo_config import cfg
+from oslo_log import log
 import paste.deploy
 from stevedore import named
+from wsgiref import simple_server
 
-
+from kiloeyes.common import constant
 from kiloeyes.common import namespace
 from kiloeyes.common import resource_api
-from kiloeyes.openstack.common import log
 
 OPTS = [
     cfg.MultiStrOpt('dispatcher',
@@ -35,10 +34,13 @@ LOG = log.getLogger(__name__)
 
 
 def api_app(conf):
+    log.set_defaults(constant.KILOEYES_LOGGING_CONTEXT_FORMAT,
+                     constant.KILOEYES_LOG_LEVELS)
+    log.register_options(cfg.CONF)
+
     cfg.CONF(args=[], project='kiloeyes')
-    log_levels = (cfg.CONF.default_log_levels)
-    cfg.set_defaults(log.log_opts, default_log_levels=log_levels)
-    log.setup('kiloeyes')
+
+    log.setup(cfg.CONF, 'kiloeyes')
 
     dispatcher_manager = named.NamedExtensionManager(
         namespace=namespace.DISPATCHER_NS,

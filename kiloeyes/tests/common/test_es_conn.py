@@ -12,15 +12,15 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import json
+import mock
+from oslo_log import log
+import requests
+
 from kiloeyes.common import es_conn
 from kiloeyes.microservice import timed_strategy
 from kiloeyes.openstack.common.fixture import config
-from kiloeyes.openstack.common import log
 from kiloeyes import tests
-
-import json
-import mock
-import requests
 
 LOG = log.getLogger(__name__)
 

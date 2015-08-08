@@ -16,7 +16,7 @@ from oslo_config import cfg
 import requests
 import ujson as json
 
-from kiloeyes.openstack.common import log
+from oslo_log import log
 
 
 ES_OPTS = [

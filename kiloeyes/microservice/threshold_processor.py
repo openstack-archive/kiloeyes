@@ -15,11 +15,12 @@
 import collections
 import copy
 import json
+from oslo_log import log
+import uuid
+
 from kiloeyes.common import alarm_expr_calculator as calculator
 from kiloeyes.common import alarm_expr_parser as parser
-from kiloeyes.openstack.common import log
 from kiloeyes.openstack.common import timeutils as tu
-import uuid
 
 
 LOG = log.getLogger(__name__)

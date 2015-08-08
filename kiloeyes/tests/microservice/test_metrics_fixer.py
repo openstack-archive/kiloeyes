@@ -13,11 +13,11 @@
 # under the License.
 
 import json
+from oslo_log import log
 import time
 
 
 from kiloeyes.microservice import metrics_fixer
-from kiloeyes.openstack.common import log
 from kiloeyes import tests
 
 LOG = log.getLogger(__name__)

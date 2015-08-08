@@ -15,7 +15,7 @@
 import falcon
 from falcon import api_helpers
 
-from kiloeyes.openstack.common import log
+from oslo_log import log
 
 
 RESOURCE_METHOD_FLAG = 'fab05a04-b861-4651-bd0c-9cb3eb9a6088'

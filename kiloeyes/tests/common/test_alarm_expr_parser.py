@@ -13,8 +13,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from oslo_log import log
+
 from kiloeyes.common import alarm_expr_parser
-from kiloeyes.openstack.common import log
 from kiloeyes import tests
 
 LOG = log.getLogger(__name__)

@@ -40,7 +40,7 @@ from oslo_config import cfg
 from kiloeyes.openstack.common import eventlet_backdoor
 from kiloeyes.openstack.common.gettextutils import _LE, _LI, _LW
 from kiloeyes.openstack.common import importutils
-from kiloeyes.openstack.common import log as logging
+from oslo_log import log as logging
 from kiloeyes.openstack.common import systemd
 from kiloeyes.openstack.common import threadgroup
 

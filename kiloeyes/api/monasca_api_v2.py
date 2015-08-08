@@ -13,7 +13,7 @@
 # under the License.
 
 from kiloeyes.common import resource_api
-from kiloeyes.openstack.common import log
+from oslo_log import log
 
 
 LOG = log.getLogger(__name__)

@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#
 # Copyright 2013 IBM Corp
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -14,23 +12,12 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+KILOEYES_LOG_LEVELS = ['oslo_messaging=INFO', 'iso8601=WARN',
+                       'requests.packages.urllib3.connectionpool=WARN',
+                       'urllib3.connectionpool=WARN', 'websocket=WARN',
+                       'stevedore=WARN', 'kiloeyes=WARN']
 
-from oslo_config import cfg
-from oslo_log import log
-import sys
-
-from kiloeyes.common import constant
-
-LOG = log.getLogger(__name__)
-
-
-def prepare_service(argv=None):
-    log.set_defaults(constant.KILOEYES_LOGGING_CONTEXT_FORMAT,
-                     constant.KILOEYES_LOG_LEVELS)
-    log.register_options(cfg.CONF)
-
-    if argv is None:
-        argv = sys.argv
-    cfg.CONF(argv[1:], project='kiloeyes')
-    log.setup(cfg.CONF, 'kiloeyes')
-    LOG.info('Service has started!')
+KILOEYES_LOGGING_CONTEXT_FORMAT = ('%(asctime)s.%(msecs)03d %(process)d '
+                                   '%(levelname)s %(name)s [%(request_id)s '
+                                   '%(user_identity)s] %(instance)s'
+                                   '%(message)s')

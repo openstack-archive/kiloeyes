@@ -12,16 +12,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from oslo_config import cfg
+from oslo_log import log
+from stevedore import driver
+import threading
+import time
 
 from kiloeyes.common import es_conn
 from kiloeyes.common import kafka_conn
 from kiloeyes.common import namespace
-from kiloeyes.openstack.common import log
 from kiloeyes.openstack.common import service as os_service
-from oslo_config import cfg
-from stevedore import driver
-import threading
-import time
 
 lock = threading.RLock()
 

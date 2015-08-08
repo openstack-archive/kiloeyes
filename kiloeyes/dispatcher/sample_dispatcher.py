@@ -17,7 +17,7 @@ from oslo_config import cfg
 
 from kiloeyes.api import monasca_api_v2
 from kiloeyes.common import resource_api
-from kiloeyes.openstack.common import log
+from oslo_log import log
 
 OPTS = [
     cfg.MultiStrOpt('id',

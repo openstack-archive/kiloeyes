@@ -13,11 +13,11 @@
 # under the License.
 
 import dateutil.parser as dparser
+from oslo_log import log
 import time
 
 from kiloeyes.microservice import timed_strategy
 from kiloeyes.openstack.common.fixture import config
-from kiloeyes.openstack.common import log
 from kiloeyes import tests
 
 LOG = log.getLogger(__name__)

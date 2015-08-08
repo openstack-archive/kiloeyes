@@ -17,6 +17,7 @@ import datetime
 import dateutil.parser
 import falcon
 from oslo_config import cfg
+from oslo_log import log
 import requests
 from stevedore import driver
 
@@ -24,7 +25,6 @@ from kiloeyes.common import es_conn
 from kiloeyes.common import kafka_conn
 from kiloeyes.common import namespace
 from kiloeyes.common import resource_api
-from kiloeyes.openstack.common import log
 from kiloeyes.openstack.common import timeutils as tu
 
 try:

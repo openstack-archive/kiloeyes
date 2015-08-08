@@ -16,9 +16,9 @@
 import json
 import mock
 import os
+from oslo_log import log
 
 from kiloeyes.microservice import threshold_processor as processor
-from kiloeyes.openstack.common import log
 from kiloeyes.openstack.common import timeutils as tu
 from kiloeyes import tests
 

@@ -14,7 +14,7 @@
 
 import json
 from kiloeyes.common import email_sender
-from kiloeyes.openstack.common import log
+from oslo_log import log
 
 LOG = log.getLogger(__name__)
 
