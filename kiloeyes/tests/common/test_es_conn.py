@@ -14,12 +14,12 @@
 
 import json
 import mock
+from oslo_config import fixture
 from oslo_log import log
 import requests
 
 from kiloeyes.common import es_conn
 from kiloeyes.microservice import timed_strategy
-from kiloeyes.openstack.common.fixture import config
 from kiloeyes import tests
 
 LOG = log.getLogger(__name__)
@@ -29,7 +29,7 @@ class TestESConnection(tests.BaseTestCase):
 
     def setUp(self):
         super(TestESConnection, self).setUp()
-        self.CONF = self.useFixture(config.Config()).conf
+        self.CONF = self.useFixture(fixture.Config()).conf
 
     def test_send_messages_with_id(self):
         self.CONF.set_override('id_field', 'id', group='es_conn')

@@ -13,11 +13,11 @@
 # under the License.
 
 import dateutil.parser as dparser
+from oslo_config import fixture
 from oslo_log import log
 import time
 
 from kiloeyes.microservice import timed_strategy
-from kiloeyes.openstack.common.fixture import config
 from kiloeyes import tests
 
 LOG = log.getLogger(__name__)
@@ -27,7 +27,7 @@ class TestStrategy(tests.BaseTestCase):
 
     def setUp(self):
         super(TestStrategy, self).setUp()
-        self.CONF = self.useFixture(config.Config()).conf
+        self.CONF = self.useFixture(fixture.Config()).conf
 
     def test_hour(self):
         self.CONF.set_override('time_unit', 'h', group='timed_strategy')

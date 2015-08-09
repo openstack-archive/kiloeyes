@@ -16,6 +16,7 @@
 
 
 from oslo_config import cfg
+import oslo_i18n
 from oslo_log import log
 import sys
 
@@ -25,6 +26,7 @@ LOG = log.getLogger(__name__)
 
 
 def prepare_service(argv=None):
+    oslo_i18n.enable_lazy()
     log.set_defaults(constant.KILOEYES_LOGGING_CONTEXT_FORMAT,
                      constant.KILOEYES_LOG_LEVELS)
     log.register_options(cfg.CONF)

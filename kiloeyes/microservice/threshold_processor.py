@@ -20,8 +20,7 @@ import uuid
 
 from kiloeyes.common import alarm_expr_calculator as calculator
 from kiloeyes.common import alarm_expr_parser as parser
-from kiloeyes.openstack.common import timeutils as tu
-
+from kiloeyes.common import timeutils as tu
 
 LOG = log.getLogger(__name__)
 

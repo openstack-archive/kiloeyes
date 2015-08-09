@@ -15,10 +15,10 @@
 
 from oslo_config import cfg
 from oslo_log import log
+from oslo_service import service as os_service
 from stevedore import driver
 
 from kiloeyes.common import namespace
-from kiloeyes.openstack.common import service as os_service
 from kiloeyes import service
 
 
@@ -40,7 +40,7 @@ def main():
                   'in the configuration file.')
         return None
 
-    launcher = os_service.ServiceLauncher()
+    launcher = os_service.ServiceLauncher(cfg.CONF)
 
     # Now load the micro service
     service_driver = driver.DriverManager(

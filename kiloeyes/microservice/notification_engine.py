@@ -14,12 +14,12 @@
 
 from oslo_config import cfg
 from oslo_log import log
+from oslo_service import service as os_service
 from stevedore import driver
 
 from kiloeyes.common import es_conn
 from kiloeyes.common import kafka_conn
 from kiloeyes.common import namespace
-from kiloeyes.openstack.common import service as os_service
 
 NOTIFICATION_ENGINE_OPTS = [
     cfg.StrOpt('topic',
