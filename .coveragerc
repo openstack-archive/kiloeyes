@@ -4,4 +4,4 @@ source = kiloeyes
 omit = kiloeyes/tests/*,kiloeyes/openstack/*
 
 [report]
-ignore-errors = True
+ignore_errors = True
