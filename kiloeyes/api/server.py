@@ -38,9 +38,14 @@ def api_app(conf):
                      constant.KILOEYES_LOG_LEVELS)
     log.register_options(cfg.CONF)
 
-    cfg.CONF(args=[], project='kiloeyes')
+    if conf.get('name'):
+        name = conf.get('name')
+    else:
+        name = 'kiloeyes'
 
-    log.setup(cfg.CONF, 'kiloeyes')
+    cfg.CONF(args=[], project=name)
+
+    log.setup(cfg.CONF, name)
 
     dispatcher_manager = named.NamedExtensionManager(
         namespace=namespace.DISPATCHER_NS,

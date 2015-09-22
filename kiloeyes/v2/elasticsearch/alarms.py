@@ -92,11 +92,14 @@ class AlarmDispatcher(object):
         params = ('{"aggs": {"latest_state": {'
                   '"terms": {"field": "alarm_definition.name", "size": 0},'
                   '"aggs": {"top_state_hits": {"top_hits": {"sort": ['
-                  '{"updated_timestamp": {"order": "desc"}}],'
+                  '{"updated_timestamp": {"order": "desc", '
+                  '"ignore_unmapped": true}}],'
                   '"_source": {"include": ['
                   '"state", "created_timestamp","updated_timestamp",'
                   '"metrics","sub_alarms","state_updated_timestamp",'
                   '"id", "alarm_definition"]},"size" : 1}}}}}}')
+
+        LOG.debug("params= %s" % params)
 
         es_res = self._es_conn.get_messages(json.loads(params),
                                             q_string='search_type=count')
@@ -110,7 +113,7 @@ class AlarmDispatcher(object):
         res.body = ''
         result_elements = []
         try:
-            if es_res["latest_state"]:
+            if es_res and es_res.get("latest_state"):
                 res_data = es_res["latest_state"]["buckets"]
                 res.body = '['
                 for bucket in res_data:

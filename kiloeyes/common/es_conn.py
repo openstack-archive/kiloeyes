@@ -92,6 +92,8 @@ class ESConnection(object):
             data = json.dumps(cond)
         else:
             data = {}
+        LOG.debug('The request path:%s?%s' % (self.search_path, q_string))
+
         return requests.post(self.search_path + "?" + q_string, data=data)
 
     def get_message_by_id(self, id):
@@ -110,6 +112,8 @@ class ESConnection(object):
             index = self.index_strategy.get_index()
             path = '%s%s%s/%s/' % (self.uri, self.index_prefix,
                                    index, self.doc_type)
+
+            LOG.debug('The request path:%s' % path)
 
             res = requests.post(path + id, data=msg)
             LOG.debug('Msg post with response code: %s' % res.status_code)
