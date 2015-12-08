@@ -22,10 +22,10 @@ To install python-dev and pip, run the following command:
 
     sudo apt-get install python-dev python-pip
 
-To install gunicorn, run the following command:
+To install kiloeyes dependency, run the following command:
 
-    sudo pip install gunicorn==19.1.0
-    
+    sudo pip install -r requirements.txt
+
 Kiloeyes depends on Kafka and ElasticSearch, both requires Java. If you do not
 already have Java, Kafka and ElasticSearch running, you will have to install
 them. Please refer to respective document on how to install Java, Kafka and
