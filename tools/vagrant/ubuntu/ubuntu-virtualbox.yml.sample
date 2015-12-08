@@ -1,0 +1,6 @@
+---
+
+vm_memory: 8192
+kafka_url: http://apache.stu.edu.tw/kafka/0.9.0.0/kafka_2.11-0.9.0.0.tgz 
+elasticsearch_url: https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.1.0/elasticsearch-2.1.0.deb
+
