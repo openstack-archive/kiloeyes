@@ -12,6 +12,7 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+from builtins import chr
 import itertools
 import pyparsing
 
@@ -205,7 +206,7 @@ RBRACE = pyparsing.Literal("}")
 
 # Initialize non-ascii unicode code points in the Basic Multilingual Plane.
 unicode_printables = u''.join(
-    unichr(c) for c in xrange(128, 65536) if not unichr(c).isspace())
+    chr(c) for c in range(128, 65536) if not chr(c).isspace())
 
 # Does not like comma. No Literals from above allowed.
 valid_identifier_chars = (
@@ -279,7 +280,7 @@ class AlarmExprParser(object):
         try:
             self.parseResult = (expression + pyparsing.stringEnd).parseString(
                 self._expr.replace(' ', ''))[0]
-        except Exception :
+        except Exception:
             self.parseResult = None
 
     @property

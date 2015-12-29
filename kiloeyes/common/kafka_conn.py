@@ -48,8 +48,8 @@ KAFKA_OPTS = [
                       'If True, message will not be parsed, otherwise '
                       'messages will be parsed.')),
     cfg.ListOpt('partitions', item_type=types.Integer(),
-                 default=[0],
-                 help='The sleep time when no messages on kafka queue.'),
+                default=[0],
+                help='The sleep time when no messages on kafka queue.'),
     cfg.BoolOpt('drop_data', default=False,
                 help=('Specify if received data should be simply dropped. '
                       'This parameter is only for testing purposes.')),
