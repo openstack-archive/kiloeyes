@@ -275,6 +275,7 @@ expression = (
 class AlarmExprParser(object):
     def __init__(self, expr):
         self._expr = expr
+        self._expr.encode('utf8').replace(' ', '')
         try:
             self.parseResult = (expression + pyparsing.stringEnd).parseString(
                 self._expr.replace(' ', ''))[0]
