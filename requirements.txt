@@ -19,4 +19,4 @@ stevedore>=0.14
 ujson>=1.33
 babel
 eventlet
-pyparsing
+pyparsing==2.0.1
