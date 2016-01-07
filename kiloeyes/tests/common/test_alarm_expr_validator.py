@@ -43,37 +43,37 @@ class TestAlarmExprCalculator(tests.BaseTestCase):
         self.util = TestCaseUtil()
 
     def test_is_valid_alarm_definition(self):
-        self.assertEqual(True, validator.is_valid_alarm_definition(
+        self.assertTrue(validator.is_valid_alarm_definition(
             self.util.get_alarm_def("alarm_def_1")))
-        self.assertEqual(True, validator.is_valid_alarm_definition(
+        self.assertTrue(validator.is_valid_alarm_definition(
             self.util.get_alarm_def("alarm_def_0")))
-        self.assertEqual(True, validator.is_valid_alarm_definition(
+        self.assertTrue(validator.is_valid_alarm_definition(
             self.util.get_alarm_def("alarm_def_1_update")))
-        self.assertEqual(True, validator.is_valid_alarm_definition(
+        self.assertTrue(validator.is_valid_alarm_definition(
             self.util.get_alarm_def("alarm_def_1_update_wrong_0")))
-        self.assertEqual(False, validator.is_valid_alarm_definition(
+        self.assertFalse(validator.is_valid_alarm_definition(
             self.util.get_alarm_def("alarm_def_0_wrong_0")))
-        self.assertEqual(False, validator.is_valid_alarm_definition(
+        self.assertFalse(validator.is_valid_alarm_definition(
             self.util.get_alarm_def("alarm_def_0_wrong_1")))
-        self.assertEqual(True, validator.is_valid_alarm_definition(
+        self.assertTrue(validator.is_valid_alarm_definition(
             self.util.get_alarm_def("alarm_def_1_update_wrong_1")))
 
     def test_is_valid_update_alarm_definition(self):
-        self.assertEqual(True, validator.is_valid_update_alarm_definition(
+        self.assertTrue(validator.is_valid_update_alarm_definition(
             self.util.get_alarm_def("alarm_def_1"),
             self.util.get_alarm_def("alarm_def_1_update")))
-        self.assertEqual(False, validator.is_valid_update_alarm_definition(
+        self.assertFalse(validator.is_valid_update_alarm_definition(
             self.util.get_alarm_def("alarm_def_1"),
             self.util.get_alarm_def("alarm_def_0_wrong_0")))
-        self.assertEqual(False, validator.is_valid_update_alarm_definition(
+        self.assertFalse(validator.is_valid_update_alarm_definition(
             self.util.get_alarm_def("alarm_def_1"),
             self.util.get_alarm_def("alarm_def_1_update_wrong_0")))
-        self.assertEqual(False, validator.is_valid_update_alarm_definition(
+        self.assertFalse(validator.is_valid_update_alarm_definition(
             self.util.get_alarm_def("alarm_def_1"),
             self.util.get_alarm_def("alarm_def_1_update_wrong_1")))
-        self.assertEqual(False, validator.is_valid_update_alarm_definition(
+        self.assertFalse(validator.is_valid_update_alarm_definition(
             self.util.get_alarm_def("alarm_def_1"),
             self.util.get_alarm_def("alarm_def_1_update_wrong_2")))
-        self.assertEqual(False, validator.is_valid_update_alarm_definition(
+        self.assertFalse(validator.is_valid_update_alarm_definition(
             self.util.get_alarm_def("alarm_def_1"),
             self.util.get_alarm_def("alarm_def_1_update_wrong_3")))
