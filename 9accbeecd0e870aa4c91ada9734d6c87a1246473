@@ -1,0 +1,9 @@
+Code-Review-1: Kuo-tung Kao <jelly.k@inwinstack.com>
+Code-Review+2: litong01 <litong01@us.ibm.com>
+Workflow+1: litong01 <litong01@us.ibm.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Thu, 07 Jan 2016 03:39:40 +0000
+Reviewed-on: https://review.openstack.org/262148
+Project: openstack/kiloeyes
+Branch: refs/heads/master
