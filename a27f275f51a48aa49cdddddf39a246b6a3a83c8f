@@ -1,0 +1,8 @@
+Code-Review+2: litong01 <litong01@us.ibm.com>
+Workflow+1: litong01 <litong01@us.ibm.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Fri, 05 Feb 2016 21:08:47 +0000
+Reviewed-on: https://review.openstack.org/276901
+Project: openstack/kiloeyes
+Branch: refs/heads/master
