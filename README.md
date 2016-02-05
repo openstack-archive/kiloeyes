@@ -135,3 +135,55 @@ If the command runs successfully, a set of files will be created in the root
 directory named covhtml. Open up the index.html from a browser to see the summary
 of the unit test coverage and the details.
 
+
+Install an all-in-one kiloeyes clean ubuntu system
+==================================================
+
+Install java 8::
+
+    sudo add-apt-repository ppa:webupd8team/java
+    sudo apt-get update
+    sudo apt-get install oracle-java8-installer
+
+Install ElasticSearch 2.2::
+
+    1. Download elasticsearch 2.2.0 deb file
+    2. Install the package by running the following command:
+
+         dpkg -i elasticsearch-2.2.0.deb
+
+    3. Edit /etc/elasticsearch/elasticsearch.yml file to make sure that the
+       network host looks something like this:
+
+         network.host: 192.168.1.144
+
+    4. Run the following command to make sure the service starts after reboot:
+
+         update-rc.d elasticsearch defaults  (to automatically starts)
+         update-rc.d -f elastic search remove  (not to automatically starts)
+
+    5. Check if ElasticSearch is running ok, by point your browser to this url:
+
+         http://192.168.1.144:9200/?pretty
+
+Install Kafka 0.9.0.0 scala 2.11 build::
+
+    1. Download kafka 0.9.0.0 from this link:
+
+         https://www.apache.org/dyn/closer.cgi?path=/kafka/0.9.0.0/kafka_2.11-0.9.0.0.tgz
+
+    2. Unzip the tgz file into a directory:
+
+         tar xf kafka_2.11-0.9.0.0.tgz
+
+    3. Change to the kafka directory and start up zookeeper and kafka server:
+    
+         ./bin/zookeeper-server-start.sh ./config/zookeeper.properties
+         ./bin/kafka-server-start.sh ./config/server.properties 
+         
+    4. Try to create a topic and make sure things running all right:
+    
+         ./bin/kafka-topics.sh --create --topic test --zookeeper localhost:2181 --partitions 1 --replication-factor 1
+
+Install Kiloeyes dependencies, server and services by following instructions above.
+ 
