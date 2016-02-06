@@ -4,7 +4,7 @@
 
 
 falcon==0.1.9
-gunicorn>=19.1.0,<=19.2.1
+gunicorn==19.1.0
 iso8601>=0.1.9
 kafka-python>=0.8.1
 oslo.config>=1.11.0

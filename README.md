@@ -13,23 +13,18 @@ by python setup tools, they will have to be installed manually. These components
 python setup tools, python-dev, python-pip and gunicorn. Follow the steps below to
 install dependencies:
 
-The typical process of installing setup tools is to download the tar.gz file
-then tar -xvf and run python setup.py install, you can also reference this page:
+Install python setuptools::
 
-    https://pypi.python.org/pypi/setuptools
+    wget https://bootstrap.pypa.io/ez_setup.py -O - | sudo python
 
-To install python-dev and pip, run the following command:
+Install python-dev, pip and pastedeploy, run the following command:
 
-    sudo apt-get install python-dev python-pip
+    sudo apt-get install python-dev python-pip python-pastedeploy
 
-To install gunicorn, run the following command:
-
-    sudo pip install gunicorn==19.1.0
-    
-Kiloeyes depends on Kafka and ElasticSearch, both requires Java. If you do not
-already have Java, Kafka and ElasticSearch running, you will have to install
-them. Please refer to respective document on how to install Java, Kafka and
-ElasticSearch::
+Kiloeyes depends on Kafka and ElasticSearch, both requires Java. At the end of
+this document in the all-in-one section, you can find detailed instructions on
+how to install each of them. Please refer to respective document on how to
+install Java, Kafka and ElasticSearch if you want to know more::
 
     http://www.java.com
     http://kafka.apache.org/documentation.html#introduction
@@ -43,7 +38,12 @@ Get the source code::
 
 Go to the root directory of the project and run the following command:
 
+    sudo pip install -r requirements.txt
     sudo python setup.py install
+
+Create a log directory::
+
+    sudo mkdir -p /var/log/kiloeyes
 
 If Kiloeyes installs successfully, you can then make changes to the following
 two files to reflect your system settings, such as Kafka server locations::
@@ -56,11 +56,11 @@ up various services by following these instructions.
 
 To start the API server, run the following command:
 
-    Running the server in foreground mode
+    Run the server in foreground mode
     gunicorn -k eventlet --worker-connections=2000 --backlog=1000
              --paste /etc/kiloeyes/kiloeyes.ini
 
-    Running the server as daemons
+    Run the server as daemons
     gunicorn -k eventlet --worker-connections=2000 --backlog=1000
              --paste /etc/kiloeyes/kiloeyes.ini -D
 
