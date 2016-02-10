@@ -78,7 +78,7 @@ class KafkaConnection(object):
         self.max_retry = cfg.CONF.kafka_opts.max_retry
         self.auto_commit = cfg.CONF.kafka_opts.auto_commit
         self.compact = cfg.CONF.kafka_opts.compact
-        self.partitions = cfg.CONF.kafka_opts.partitions
+        self.partitions = [int(x) for x in cfg.CONF.kafka_opts.partitions]
         self.drop_data = cfg.CONF.kafka_opts.drop_data
 
         self._client = None
