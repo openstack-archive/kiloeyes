@@ -177,13 +177,71 @@ Install Kafka 0.9.0.0 scala 2.11 build::
          tar xf kafka_2.11-0.9.0.0.tgz
 
     3. Change to the kafka directory and start up zookeeper and kafka server:
-    
+
          ./bin/zookeeper-server-start.sh ./config/zookeeper.properties
          ./bin/kafka-server-start.sh ./config/server.properties 
-         
+
     4. Try to create a topic and make sure things running all right:
-    
+
          ./bin/kafka-topics.sh --create --topic test --zookeeper localhost:2181 --partitions 1 --replication-factor 1
 
 Install Kiloeyes dependencies, server and services by following instructions above.
- 
+
+
+Register kiloeyes as monitoring service with Keystone::
+=======================================================
+1. On the keystone server, setup environment variable:
+
+    export OS_USERNAME=admin
+    export OS_PASSWORD=<password>
+    export OS_TENANT_NAME=admin
+    export OS_AUTH_URL=http://localhost:5000/v2.0
+
+2. Create monitoring service by running the following command:
+
+    openstack service create --name kiloeyes --description "Monitoring" monitoring
+
+3. Create endpoint by running the following command:
+
+    openstack endpoint create --region RegionOne monitoring --publicurl http://<<kiloeyes_server_host_ip>>:9090/v2.0
+
+
+Install monasca-agent from the source::
+=======================================
+1. Get the source code:
+
+    git clone https://github.com/openstack/monasca-agent.git
+
+2. Change requirements.txt due to a bug in the monasca-agent project:
+
+    requests==2.8.1
+    psutil=3.4.2
+
+3. Install the requirements:
+
+    sudo apt-get install python-dev python-pip
+    sudo pip install -r requirements.txt
+
+4. Install monasca agents:
+
+    sudo python setup.py install
+
+5. Run the following command to create agent configurations:
+
+    sudo monasca-setup --username KEYSTONE_USERNAME --password KEYSTONE_PASSWORD --project_name KEYSTONE_PROJECT_NAME --keystone_url http://URL_OF_KEYSTONE_API:35357/v3
+
+    Replace KEYSTONE_USERNAME, KEYSTONE_PASSWORD, KEYSTONE_PROJECT_NAME,
+    URL_OF_KEYSTONE_API with correct value according to your openstack
+    keystone setups
+
+6. If the above runs with no errors, you need to add the following in
+/etc/monasca/agent/supervisor.conf file:
+
+    [inet_http_server]
+    port = localhost:9001
+
+7. Restart monasca agent services on the machine by running the following command:
+
+    sudo service monasca-agent restart
+
+8. Agent log files will be in /var/log/monasca/agent directory.
