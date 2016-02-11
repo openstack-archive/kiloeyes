@@ -46,13 +46,13 @@ class MetricsFixer(object):
     def process_msg(self, msg):
         try:
             data = json.loads(msg)
-            if not isinstance(data, list):
-                data = [data]
-            result = ''
-            for item in data:
-                result += '{"index":{}}\n' + MetricsFixer._add_hash(item)
-                result += '\n'
-            return result
+            #if not isinstance(data, list):
+            #    data = [data]
+            #result = ''
+            #for item in data:
+            #    result += '{"index":{}}\n' + MetricsFixer._add_hash(item)
+            #    result += '\n'
+            return MetricsFixer._add_hash(data)
         except Exception:
             LOG.exception('')
             return ''

@@ -100,4 +100,4 @@ if __name__ == '__main__':
         setup_metrics(sys.argv)
     else:
         print('Usage: setup_metrics endpoint. For example:')
-        print('       setup_metrics http://host:9000/data_2015')
+        print('       setup_metrics http://<host_ip>:9090/v20/metrics')
