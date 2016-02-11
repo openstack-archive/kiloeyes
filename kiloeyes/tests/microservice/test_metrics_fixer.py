@@ -48,7 +48,7 @@ class TestMetricsFixer(tests.BaseTestCase):
         fixer = metrics_fixer.MetricsFixer()
         result = fixer.process_msg(json.dumps(items))
         self.assertTrue(isinstance(result, str))
-        self.assertTrue(result.startswith('{"index":{}}'))
+        self.assertFalse(result.startswith('{"index":{}}'))
 
     def test_process_msg_multiple(self):
         items = [{'name': 'name1', 'dimensions': {'name1': 'value1'},
