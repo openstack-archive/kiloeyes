@@ -67,20 +67,11 @@ class ESConnection(object):
         if self.drop_data:
             return
         else:
-            # figure out id situation
-            _id = ''
-            if self.id_field:
-                obj = json.loads(msg)
-                _id = obj.get(self.id_field)
-                if not _id:
-                    LOG.error('Msg does not have required id field %s' %
-                              self.id_field)
-                    return 400
             # index may change over the time, it has to be called for each
             # request
             index = self.index_strategy.get_index()
-            path = '%s%s%s/%s/%s' % (self.uri, self.index_prefix,
-                                     index, self.doc_type, _id)
+            path = '%s%s%s/%s/_bulk' % (self.uri, self.index_prefix,
+                                        index, self.doc_type)
             res = requests.post(path, data=msg)
             LOG.debug('Msg post target=%s' % path)
             LOG.debug('Msg posted with response code: %s' % res.status_code)
