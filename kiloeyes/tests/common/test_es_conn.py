@@ -43,17 +43,3 @@ class TestESConnection(tests.BaseTestCase):
         with mock.patch.object(requests, 'post', return_value=req_result):
             conn.send_messages(json.dumps(msg))
             self.assertTrue(requests.post.called)
-
-    def test_send_messages_without_id(self):
-        self.CONF.set_override('id_field', 'id', group='es_conn')
-        self.CONF.set_override('uri', 'http://fake', group='es_conn')
-        self.CONF.set_override('time_unit', 'h', group='timed_strategy')
-        strategy = timed_strategy.TimedStrategy()
-        conn = es_conn.ESConnection('alarms', strategy, 'pre_')
-        req_result = mock.Mock()
-        req_result.status_code = 204
-        msg = {'not_id': 'whatever'}
-        with mock.patch.object(requests, 'post', return_value=req_result):
-            res = conn.send_messages(json.dumps(msg))
-            self.assertFalse(requests.post.called)
-            self.assertEqual(res, 400)
