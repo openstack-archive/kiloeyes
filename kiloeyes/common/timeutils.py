@@ -115,6 +115,8 @@ def utcnow():
 
 def iso8601_from_timestamp(timestamp):
     """Returns an iso8601 formatted date from timestamp."""
+    if timestamp > 1000000000000:
+        timestamp = timestamp / 1000
     return isotime(datetime.datetime.utcfromtimestamp(timestamp))
 
 
