@@ -1,0 +1,18 @@
+CHANGES
+=======
+
+* ES now returns timestamp as milliseconds vs seconds
+* enable bulk message post on persister
+* Added more instructions
+* bulk insert can not be done implicitly
+* fix the partitions data type error
+* Updated the installation instructions
+* added more instruction on how to create an all-in-one kiloeyes
+* unit test passed for py27
+* Add Vagrant sample file to ease development environment bootstrap
+* Make the server more flexible with configuration files
+* remove old openstack incubator project reference
+* remove old oslo.config and use new oslo_config
+* Make minor modifications in the README
+* seeding the project
+* Added .gitreview

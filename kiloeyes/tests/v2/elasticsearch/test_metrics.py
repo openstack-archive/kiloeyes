@@ -78,7 +78,9 @@ class TestMetricDispatcher(base.BaseTestCase):
         self.CONF.set_override('topic', 'fake', group='metrics')
         self.CONF.set_override('doc_type', 'fake', group='metrics')
         self.CONF.set_override('index_prefix', 'also_fake', group='metrics')
-        self.CONF.set_override('uri', 'fake_es_uri', group='es_conn')
+        self.CONF.set_override('index_template', 'etc/metrics.template',
+                               group='metrics')
+        self.CONF.set_override('uri', 'http://fake_es_uri', group='es_conn')
 
         res = mock.Mock()
         res.status_code = 200
@@ -91,9 +93,12 @@ class TestMetricDispatcher(base.BaseTestCase):
                 "name": {"type": "string", "index": "not_analyzed"},
                 "timestamp": {"type": "string", "index": "not_analyzed"},
                 "value": {"type": "double"}}}}}}
+        put_res = mock.Mock()
+        put_res.status_code = '200'
         with mock.patch.object(requests, 'get',
                                return_value=res):
-            self.dispatcher = metrics.MetricDispatcher({})
+            with mock.patch.object(requests, 'put', return_value=put_res):
+                self.dispatcher = metrics.MetricDispatcher({})
 
     def test_initialization(self):
         # test that the kafka connection uri should be 'fake' as it was passed
@@ -106,11 +111,11 @@ class TestMetricDispatcher(base.BaseTestCase):
         # test that the doc type of the es connection is fake
         self.assertEqual(self.dispatcher._es_conn.doc_type, 'fake')
 
-        self.assertEqual(self.dispatcher._es_conn.uri, 'fake_es_uri/')
+        self.assertEqual(self.dispatcher._es_conn.uri, 'http://fake_es_uri/')
 
         # test that the query url is correctly formed
         self.assertEqual(self.dispatcher._query_url, (
-            'fake_es_uri/also_fake*/fake/_search?search_type=count'))
+            'http://fake_es_uri/also_fake*/fake/_search?search_type=count'))
 
     def test_post_data(self):
         with mock.patch.object(kafka_conn.KafkaConnection, 'send_messages',

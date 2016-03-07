@@ -42,6 +42,8 @@ METRICS_OPTS = [
                help='The index strategy used to create index name.'),
     cfg.StrOpt('index_prefix', default='data_',
                help='The index prefix where metrics were saved to.'),
+    cfg.StrOpt('index_template', default='/etc/kiloeyes/metrics.template',
+               help='The index template which metrics index should use.'),
     cfg.IntOpt('size', default=10000,
                help=('The query result limit. Any result set more than '
                      'the limit will be discarded. To see all the matching '
@@ -135,6 +137,7 @@ class MetricDispatcher(object):
         super(MetricDispatcher, self).__init__()
         self.topic = cfg.CONF.metrics.topic
         self.doc_type = cfg.CONF.metrics.doc_type
+        self.index_template = cfg.CONF.metrics.index_template
         self.size = cfg.CONF.metrics.size
         self._kafka_conn = kafka_conn.KafkaConnection(self.topic)
 
@@ -206,6 +209,24 @@ class MetricDispatcher(object):
         "interval":"%(period)s"},"aggs":{"statistics":{"stats":
         {"field":"value"}}}}}}}}}
         """
+
+        # Setup index template
+        self.setup_index_template()
+
+    def setup_index_template(self):
+        status = '400'
+        with open(self.index_template) as template_file:
+            template_path = ''.join([self._es_conn.uri,
+                                     '/_template/metrics'])
+            es_res = requests.put(template_path, data=template_file.read())
+            status = getattr(falcon, 'HTTP_%s' % es_res.status_code)
+
+        if status == '400':
+            LOG.error('Metrics template can not be created. Status code %s'
+                      % status)
+            exit(1)
+        else:
+            LOG.debug('Index template set successfully! Status %s' % status)
 
     def post_data(self, req, res):
         LOG.debug('Getting the call.')
