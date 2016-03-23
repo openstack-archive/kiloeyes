@@ -73,6 +73,7 @@ def setup_metrics(argv):
                     res = requests.post(argv[1], data=json.dumps(MOLD))
                     if res.status_code != 201 and res.status_code != 204:
                         print(json.dumps(MOLD))
+                        print('StatusCode is %s' % res.status_code)
                         exit(0)
                 # multiple messages
                 for k in range(3):
@@ -89,8 +90,10 @@ def setup_metrics(argv):
                         msg += ',' + json.dumps(MOLD)
                     msg += "]"
                     res = requests.post(argv[1], data=msg)
+
                     if res.status_code != 201 and res.status_code != 204:
                         print(json.dumps(MOLD))
+                        print('StatusCode is %s' % res.status_code)
                         exit(0)
         del MOLD_DIMENSIONS['key_' + str(a)]
         print('round finished %s' % a)
