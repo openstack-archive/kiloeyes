@@ -190,58 +190,107 @@ Install Kiloeyes dependencies, server and services by following instructions abo
 
 Register kiloeyes as monitoring service with Keystone::
 =======================================================
-1. On the keystone server, setup environment variable:
+1. On the keystone server, setup environment variable::
 
-    export OS_USERNAME=admin
-    export OS_PASSWORD=<password>
-    export OS_TENANT_NAME=admin
-    export OS_AUTH_URL=http://localhost:5000/v2.0
+        export OS_USERNAME=admin
+        export OS_PASSWORD=<password>
+        export OS_TENANT_NAME=admin
+        export OS_AUTH_URL=http://localhost:5000/v3
+        export OS_IDENTITY_API_VERSION=3
 
-2. Create monitoring service by running the following command:
+2. Create monitoring service by running the following command::
 
     openstack service create --name kiloeyes --description "Monitoring" monitoring
 
-3. Create endpoint by running the following command:
+3. Create endpoint by running the following command::
 
-    openstack endpoint create --region RegionOne monitoring --publicurl http://<<kiloeyes_server_host_ip>>:9090/v2.0
+    openstack endpoint create --region RegionOne monitoring public http://<<kiloeyes_server_host_ip>>:9090/v2.0
 
 
 Install monasca-agent from the source::
 =======================================
-1. Get the source code:
+1. Get the source code::
 
-    git clone https://github.com/openstack/monasca-agent.git
+        git clone https://github.com/openstack/monasca-agent.git
 
-2. Change requirements.txt due to a bug in the monasca-agent project:
+2. Change requirements.txt due to a bug in the monasca-agent project::
 
-    requests==2.8.1
-    psutil=3.4.2
+        requests==2.8.1
+        psutil=3.4.2
 
-3. Install the requirements:
+3. Install the requirements::
 
-    sudo apt-get install python-dev python-pip
-    sudo pip install -r requirements.txt
+        sudo apt-get install python-dev python-pip
+        sudo pip install -r requirements.txt
 
-4. Install monasca agents:
+4. Install monasca agents::
 
-    sudo python setup.py install
+        sudo python setup.py install
 
-5. Run the following command to create agent configurations:
+5. Run the following command to create agent configurations::
 
-    sudo monasca-setup --username KEYSTONE_USERNAME --password KEYSTONE_PASSWORD --project_name KEYSTONE_PROJECT_NAME --keystone_url http://URL_OF_KEYSTONE_API:35357/v3
+        sudo monasca-setup --username KEYSTONE_USERNAME --password KEYSTONE_PASSWORD --project_name KEYSTONE_PROJECT_NAME --keystone_url http://URL_OF_KEYSTONE_API:5000/v3
 
     Replace KEYSTONE_USERNAME, KEYSTONE_PASSWORD, KEYSTONE_PROJECT_NAME,
     URL_OF_KEYSTONE_API with correct value according to your openstack
     keystone setups
 
 6. If the above runs with no errors, you need to add the following in
-/etc/monasca/agent/supervisor.conf file:
+/etc/monasca/agent/supervisor.conf file::
 
-    [inet_http_server]
-    port = localhost:9001
+        [inet_http_server]
+        port = localhost:9001
 
-7. Restart monasca agent services on the machine by running the following command:
+7. Check configuration file at /etc/monasca/agent/agent.yml, the content
+should look like the following::
 
-    sudo service monasca-agent restart
+        keystone_url: http://192.168.15.5:5000/v3
+        username: <<id to use to post data>>
+        password: <<user password>>
+        project_name: service
+        url: null
 
-8. Agent log files will be in /var/log/monasca/agent directory.
+    You can create a user in keystone for agent. Make sure that the user is
+    in the project named service.
+
+8. Restart monasca agent services on the machine by running the following command::
+
+        sudo service monasca-agent restart
+
+9. Agent log files will be in /var/log/monasca/agent directory.
+
+
+Enable keystone middleware for security
+=======================================
+To enable keystone middleware for security, the following configurations need
+to be done.
+
+1. Install keystone middleware::
+
+        sudo apt-get install python-keystonemiddleware
+
+2. Edit /etc/kiloeyes/kiloeyes.ini file to insert the middleware in the pipeline::
+
+        [pipeline:main]
+        #pipeline = api
+        pipeline = authtoken api
+
+        [filter:authtoken]
+        paste.filter_factory = keystonemiddleware.auth_token:filter_factory
+        delay_auth_decision = false
+3. Edit /etc/kiloeyes/kiloeyes.conf file to configure the middleware::
+
+        [keystone_authtoken]
+        auth_uri = http://<<keystone_ip>>:5000
+        auth_url = http://<<keystone_ip>>:5000
+        identity_uri = http://<<keystone_ip>>:5000
+
+        auth_type = token
+        admin_user = admin
+        admin_password = <<admin password>>
+        admin_tenant_name = admin
+
+4. Restart kiloeyes api server::
+
+        gunicorn --debug -k eventlet --worker-connections=20 --backlog=10
+            --paste /etc/kiloeyes/kiloeyes.ini
