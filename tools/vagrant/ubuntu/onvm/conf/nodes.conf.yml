@@ -1,0 +1,49 @@
+---
+repo:
+  host_name: repo.leap.dev
+  eth0: 192.168.1.88
+  eth1: 192.168.1.88
+
+controller:
+  host_name: controller.leap.dev
+  eth0: 192.168.1.90
+
+devstack:
+  host_name: devstack.leap.dev
+  eth0: 192.168.1.93
+
+agent01:
+  host_name: agent01.leap.dev
+  eth0: 192.168.1.88
+
+logical2physical:
+  kiloeyes: controller
+  elastic: controller
+  kafka: controller
+  devstack: devstack
+
+
+# Define how many logical nodes and the sequence of the installation
+ctlnodes:
+  - devstack
+  - elastic
+  - kafka
+  - kiloeyes
+
+agentes:
+  - agent01
+
+uselocalrepo: yes
+
+aptopt: --force-yes
+
+
+# The nodes should be a list of logical name
+# The folder should be a local directory start from the project root
+synchfolders:
+  elastic:
+    source: leapbin
+    target: /leapbin
+  kiloeyes:
+    source: ./../../../../kiloeyes
+    target: /opt/kiloeyes

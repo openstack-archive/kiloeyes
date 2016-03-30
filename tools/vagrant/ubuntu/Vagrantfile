@@ -2,49 +2,59 @@
 # vi: set ft=ruby :
 require 'yaml'
 
-config_file=File.expand_path(File.join(File.dirname(__FILE__), 'ubuntu-virtualbox.yml'))
-settings=YAML.load_file(config_file)
+nodes = YAML.load_file("onvm/conf/nodes.conf.yml")
+ids = YAML.load_file("onvm/conf/ids.conf.yml")
 
-VM_MEM = settings['vm_memory']
-KAFKA_URL = settings['kafka_url']
-# ElasticSearch URL
-ES_URL = settings['elasticsearch_url']
+Vagrant.configure("2") do |config|
+  config.vm.box = "tknerr/managed-server-dummy"
+  config.ssh.username = ids['username']
+  config.ssh.password = ids['password']
 
-# All Vagrant configuration is done below. The "2" in Vagrant.configure
-# configures the configuration version (we support older styles for
-# backwards compatibility). Please don't change it unless you know what
-# you're doing.
-Vagrant.configure(2) do |config|
-  # The most common configuration options are documented and commented below.
-  # For a complete reference, please see the online documentation at
-  # https://docs.vagrantup.com.
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.synced_folder "onvm", "/onvm", disabled: false, create: true
 
-  # Every Vagrant development environment requires a box. You can search for
-  # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "ubuntu/trusty64"
 
-  config.vm.provider "virtualbox" do |vb|
-  #   # Display the VirtualBox GUI when booting the machine
-  #   vb.gui = true
-  #
-  #   # Customize the amount of memory on the VM:
-     vb.memory = VM_MEM
-     config.vm.network "private_network", ip: "192.168.0.10"
-   end
-  
-   config.vm.provision "shell", inline: <<-SHELL
-     echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | sudo tee /etc/apt/sources.list.d/webupd8team-java.list
-     echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | sudo tee -a /etc/apt/sources.list.d/webupd8team-java.list
-     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
-     sudo apt-get update
-     sudo apt-get install -y git build-essential python-pip python-dev vim 
-     sudo apt-get install -y virtualenvwrapper
-     cd /vagrant && sudo git clone https://github.com/openstack/kiloeyes.git
-     echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
-     echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
-     sudo apt-get install -y oracle-java8-installer
-     cd /vagrant && wget #{KAFKA_URL} -O - | tar -zxvf - -C /vagrant 
-     wget #{ES_URL} -O /tmp/es.deb && sudo dpkg -i /tmp/es.deb
-     echo source /usr/share/virtualenvwrapper/virtualenvwrapper_lazy.sh | tee -a ~/.profile
-   SHELL
+  sync_cfg = nodes['synchfolders']
+
+  lnodes = nodes['ctlnodes']
+  if lnodes
+    lnodes.each do |key|
+      config.vm.define "#{key}" do |node|
+        nodekey = nodes['logical2physical'][key]
+
+        if sync_cfg[key]
+          node.vm.synced_folder sync_cfg[key]['source'],
+            sync_cfg[key]['target'], disabled: false, create: true
+        end
+
+        node.vm.provider :managed do |managed|
+          managed.server = nodes[nodekey]['eth0']
+        end
+
+        node.vm.provision "#{key}-install", type: "shell" do |s|
+          s.path = "onvm/scripts/install-" + key + ".sh"
+          s.args = ids['sys_password'] + ' ' + nodes[nodekey]['eth0']
+        end
+      end
+    end
+  end
+
+  # agent node setup
+  lnodes = nodes['agentes']
+  if lnodes
+    lnodes.each do |key|
+      config.vm.define "#{key}" do |node|
+        node.vm.provider :managed do |managed|
+          managed.server = nodes[key]['eth0']
+        end
+
+        node.vm.provision "#{key}-install", type: "shell" do |s|
+          s.path = "onvm/scripts/install-agent.sh"
+          s.args = ids['sys_password'] + " " + nodes[key]['eth0']
+        end
+
+      end
+    end
+  end
+
 end
