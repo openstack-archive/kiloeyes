@@ -9,6 +9,7 @@ __pycache__/
 .Python
 .testrepository/
 .venv/
+.vagrant/
 env/
 bin/
 build/
@@ -22,10 +23,11 @@ sdist/
 var/
 covhtml/
 cover/
+tools/vagrant/ubuntu/leapbin
 *.egg-info/
 .installed.cfg
 *.egg
-
+.DS_Store
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
