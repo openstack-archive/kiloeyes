@@ -45,5 +45,5 @@ synchfolders:
     source: leapbin
     target: /leapbin
   kiloeyes:
-    source: ./../../../../kiloeyes
+    source: ./../../kiloeyes
     target: /opt/kiloeyes

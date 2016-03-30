@@ -23,7 +23,7 @@ sdist/
 var/
 covhtml/
 cover/
-tools/vagrant/ubuntu/leapbin
+vagrant/leapbin
 *.egg-info/
 .installed.cfg
 *.egg

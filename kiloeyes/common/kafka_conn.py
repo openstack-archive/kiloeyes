@@ -159,10 +159,12 @@ class KafkaConnection(object):
             if not self._consumer:
                 self._init_consumer()
 
-            for msg in self._consumer:
-                if msg.message:
-                    LOG.debug(msg.message.value)
-                    yield msg
+            if self._consumer:
+                for msg in self._consumer:
+                    if msg.message:
+                        LOG.debug(msg.message.value)
+                        yield msg
+            time.sleep(self.wait_time)
         except common.OffsetOutOfRangeError:
             self._consumer.seek(0, 0)
             LOG.error('Seems consumer has been down for a long time.')
