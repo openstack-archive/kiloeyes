@@ -20,7 +20,7 @@ logical2physical:
   kiloeyes: controller
   elastic: controller
   kafka: controller
-  devstack: devstack
+  devstack: controller
 
 
 # Define how many logical nodes and the sequence of the installation
@@ -31,7 +31,8 @@ ctlnodes:
   - kiloeyes
 
 agentes:
-  - agent01
+#  - agent01
+#  - agent02
 
 uselocalrepo: yes
 
@@ -42,7 +43,7 @@ aptopt: --force-yes
 # The folder should be a local directory start from the project root
 synchfolders:
   elastic:
-    source: leapbin
+    source: ./../../leapbin
     target: /leapbin
   kiloeyes:
     source: ./../../kiloeyes

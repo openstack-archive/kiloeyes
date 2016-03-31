@@ -1,29 +1,42 @@
-Note
+Introduction
+============
+This subproject uses vagrant to setup kiloeyes. To make the install easier,
+one should download java 8, elasticsearch, kibana and kafka binaries and place
+these files into a directory named leapbin at the same directory where the
+project kiloeyes is. Here is an example::
+
+        leapbin
+            elasticsearch-2.3.0.deb
+            jdk-8u77-linux-x64.tar.gz
+            kafka_2.11-0.9.0.0.tgz
+            kibana-4.5.0-linux-x64.tar.gz
+        kiloeyes
+            etc
+            kiloeyes
+            vagrant
+            ....
+
+Having the structure like this will make the install goes faster. And when you
+need to run the scripts repeatly, you won't need to keep downloading these
+large files. The example directory leapbin above also lists the current
+required software to run kiloeyes.
+
+
+Usage:
 ======
+You can install everything onto one machine or you can choose install different
+components onto different servers. There can be a lot of ways to split up
+servers for different services. Here is an example:
 
-Only tested on Vagrant 1.7.x + VirtualBox 4.3
+        controller:
+            java
+            elasticsearch
+            kibana
+            kiloeyes
+        devstack:
+            OpenStack environment
+        agent01:
+            agent
 
-It will install JDK8, ElasticSeach, Kafka, Virtualenv, and VirtualenvWrapper for you.
-
-Usage
-======
-
-Create your own Vagrant config. file
-
-```
-  cp ubuntu-virtualbox.yml.sample ubuntu-virtualbox.yml
-```
-
-You can change VM memory, Kafka, or ElasticSearch package URL.
-
-```
-  vagrant up
-```
-
-Under /vagrant folder you can find kiloeyes project and Kafka uncompress folders.
-
-Use below command to start ElasticSearch:
-
-```
-  sudo /etc/init.d/elasticsearch start
-```
+To indicate how the servers will be used, please edit configuration file in
+vagrant/onvm/conf/nodes.conf.yml and ids.conf.yml file.

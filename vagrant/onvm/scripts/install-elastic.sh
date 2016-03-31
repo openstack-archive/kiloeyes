@@ -16,5 +16,22 @@ if [ -f /leapbin/elasticsearch-2.*.deb ];then
   echo 'Elastic install is now complete!'
 else
   echo 'Elasticsearch binary was not found!'
-  echo 'Download elasticsearch 2.2.x.deb and place it in tools/vagrant/ubuntu/leapbin directory.'
+  echo 'Download elasticsearch and configure the location in nodes.conf.yml file.'
+fi
+
+if [ -f /leapbin/kibana-4.*-linux-x64.tar.gz ];then
+  mkdir -p /opt/kibana
+  tar -zxf /leapbin/kibana-4.*-linux-x64.tar.gz -C /opt/kibana
+  mv /opt/kibana/* /opt/kibana/kibana
+  echo -e 'elasticsearch.url: "http://'$2':9200"' >> /opt/kibana/kibana/config/kibana.yml
+
+  # Start the kibana services
+  start-stop-daemon --start --quiet --chuid root \
+    --exec /opt/kibana/kibana/bin/kibana \
+    --pidfile /opt/kibana/kibana.pid --make-pidfile --background >> /dev/null 2>&1
+
+  echo 'Kibana install is now complete!'
+else
+  echo 'Kibana binary was not found!'
+  echo 'Download kibana and  and configure the location in nodes.conf.yml file.'
 fi
