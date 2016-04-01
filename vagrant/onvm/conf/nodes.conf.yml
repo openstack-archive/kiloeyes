@@ -1,16 +1,7 @@
 ---
-repo:
-  host_name: repo.leap.dev
-  eth0: 192.168.1.88
-  eth1: 192.168.1.88
-
 controller:
   host_name: controller.leap.dev
   eth0: 192.168.1.90
-
-devstack:
-  host_name: devstack.leap.dev
-  eth0: 192.168.1.93
 
 agent01:
   host_name: agent01.leap.dev
@@ -20,27 +11,33 @@ logical2physical:
   kiloeyes: controller
   elastic: controller
   kafka: controller
-  devstack: controller
 
 
 # Define how many logical nodes and the sequence of the installation
 ctlnodes:
-  - devstack
   - elastic
   - kafka
   - kiloeyes
 
+# Define how many agents should be installed.
 agentes:
-#  - agent01
-#  - agent02
+  - agent01
 
-uselocalrepo: yes
+# This section defines the OpenStack credentials which will be used to
+# create services and users to configure kiloeyes and agent.
+# security_on determines if keystone middleware should be pluged into the
+# kiloeye pipeline.
+# no security is turned on.
+security_on: true
+auth_uri: http://192.168.15.5:5000
+admin_user: admin
+admin_pw: ps
+agent_user: kiloeyesagent
+agent_pw: ps
 
-aptopt: --force-yes
-
-
-# The nodes should be a list of logical name
-# The folder should be a local directory start from the project root
+# The nodes should be a list of logical name and should appear in the ctlnodes
+# The source should be a local directory relative to the vagrant directory
+# The target should be a directory on the target system.
 synchfolders:
   elastic:
     source: ./../../leapbin

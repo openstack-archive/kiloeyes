@@ -281,8 +281,6 @@ to be done.
 3. Edit /etc/kiloeyes/kiloeyes.conf file to configure the middleware::
 
         [keystone_authtoken]
-        auth_uri = http://<<keystone_ip>>:5000
-        auth_url = http://<<keystone_ip>>:5000
         identity_uri = http://<<keystone_ip>>:5000
 
         auth_type = token

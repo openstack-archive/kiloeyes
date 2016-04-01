@@ -18,13 +18,63 @@ eval node_ip=\$leap_${leap_logical2physical_kafka}_eth0; node_ip=`echo $node_ip`
 kafka_ip=$node_ip
 eval node_ip=\$leap_${leap_logical2physical_elastic}_eth0; node_ip=`echo $node_ip`
 elastic_ip=$node_ip
-
+eval node_ip=\$leap_${leap_logical2physical_kiloeyes}_eth0; node_ip=`echo $node_ip`
+kiloeyes_ip=$node_ip
 
 k_log_dir='/var/log/kiloeyes'
 k_pid_dir='/var/run/kiloeyes'
 mkdir -p $k_log_dir $k_pid_dir
 
 # Config the kiloeyes
+
+# If security_on, then we need to configure the keystone middleware
+if [ $leap_security_on='true' ]; then
+
+  echo 'Install keystone middleware...'
+  apt-get -qqy install software-properties-common
+  add-apt-repository -y cloud-archive:liberty
+  apt-get update
+  apt-get -qqy install python-keystonemiddleware
+
+  iniset /etc/kiloeyes/kiloeyes.ini 'pipeline:main' 'pipeline' 'authtoken api'
+  iniset /etc/kiloeyes/kiloeyes.ini 'filter:authtoken' 'paste.filter_factory' 'keystonemiddleware.auth_token:filter_factory'
+  iniset /etc/kiloeyes/kiloeyes.ini 'filter:authtoken' 'delay_auth_decision'  false
+
+  iniset /etc/kiloeyes/kiloeyes.conf keystone_authtoken identity_uri $leap_auth_uri
+  iniset /etc/kiloeyes/kiloeyes.conf keystone_authtoken auth_type token
+  iniset /etc/kiloeyes/kiloeyes.conf keystone_authtoken admin_user $leap_admin_user
+  iniset /etc/kiloeyes/kiloeyes.conf keystone_authtoken admin_password $leap_admin_pw
+  iniset /etc/kiloeyes/kiloeyes.conf keystone_authtoken admin_tenant_name admin
+fi
+
+# if auth_uri is configured, then we need to create these services and users
+if [ ! -z $leap_auth_uri ]; then
+
+  apt-get -qqy install software-properties-common
+  add-apt-repository -y cloud-archive:liberty
+  apt-get update
+  apt-get -qqy install python-openstackclient
+  # Setup environment variables
+  export OS_USERNAME=$leap_admin_user
+  export OS_PASSWORD=$leap_admin_pw
+  export OS_TENANT_NAME=admin
+  export OS_AUTH_URL="${leap_auth_uri}/v3"
+  export OS_IDENTITY_API_VERSION=3
+
+  # if the service and user have not setup, we will go ahead set them up
+  openstack service list | grep monitoring
+  if [ $? -gt 0 ]; then
+    openstack service create --name kiloeyes --description "Monitoring" monitoring
+    openstack endpoint create --region RegionOne monitoring public http://$kiloeyes_ip:9090/v2.0
+    openstack endpoint create --region RegionOne monitoring admin http://$kiloeyes_ip:9090/v2.0
+    openstack endpoint create --region RegionOne monitoring internal http://$kiloeyes_ip:9090/v2.0
+
+    openstack project create --domain default --description "Kiloeyes Project" kiloeyes
+    openstack user create --domain default --password $leap_agent_pw $leap_agent_user
+    openstack role add --project kiloeyes --user $leap_agent_user member
+  fi
+fi
+
 echo 'Config /etc/kiloeyes/kiloeyes.conf file...'
 iniset /etc/kiloeyes/kiloeyes.conf DEFAULT log_dir $k_log_dir
 iniset /etc/kiloeyes/kiloeyes.conf kafka_opts uri $kafka_ip:9092
