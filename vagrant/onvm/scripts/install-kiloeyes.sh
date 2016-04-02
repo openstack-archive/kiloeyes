@@ -31,17 +31,16 @@ mkdir -p $k_log_dir $k_pid_dir
 if [ $leap_security_on='true' ]; then
 
   echo 'Install keystone middleware...'
-  apt-get -qqy install software-properties-common
-  add-apt-repository -y cloud-archive:liberty
-  apt-get update
-  apt-get -qqy install python-keystonemiddleware
+  pip install keystonemiddleware
 
   iniset /etc/kiloeyes/kiloeyes.ini 'pipeline:main' 'pipeline' 'authtoken api'
   iniset /etc/kiloeyes/kiloeyes.ini 'filter:authtoken' 'paste.filter_factory' 'keystonemiddleware.auth_token:filter_factory'
   iniset /etc/kiloeyes/kiloeyes.ini 'filter:authtoken' 'delay_auth_decision'  false
 
-  iniset /etc/kiloeyes/kiloeyes.conf keystone_authtoken identity_uri $leap_auth_uri
+  iniset /etc/kiloeyes/kiloeyes.conf keystone_authtoken auth_uri "${leap_auth_uri}/v3"
+  iniset /etc/kiloeyes/kiloeyes.conf keystone_authtoken auth_url "${leap_auth_uri}/v3"
   iniset /etc/kiloeyes/kiloeyes.conf keystone_authtoken auth_type token
+  iniset /etc/kiloeyes/kiloeyes.conf keystone_authtoken auth_version 3
   iniset /etc/kiloeyes/kiloeyes.conf keystone_authtoken admin_user $leap_admin_user
   iniset /etc/kiloeyes/kiloeyes.conf keystone_authtoken admin_password $leap_admin_pw
   iniset /etc/kiloeyes/kiloeyes.conf keystone_authtoken admin_tenant_name admin
@@ -50,10 +49,8 @@ fi
 # if auth_uri is configured, then we need to create these services and users
 if [ ! -z $leap_auth_uri ]; then
 
-  apt-get -qqy install software-properties-common
-  add-apt-repository -y cloud-archive:liberty
-  apt-get update
-  apt-get -qqy install python-openstackclient
+  pip install wrapt python-openstackclient
+
   # Setup environment variables
   export OS_USERNAME=$leap_admin_user
   export OS_PASSWORD=$leap_admin_pw
@@ -71,7 +68,7 @@ if [ ! -z $leap_auth_uri ]; then
 
     openstack project create --domain default --description "Kiloeyes Project" kiloeyes
     openstack user create --domain default --password $leap_agent_pw $leap_agent_user
-    openstack role add --project kiloeyes --user $leap_agent_user member
+    openstack role add --project kiloeyes --user $leap_agent_user admin
   fi
 fi
 
