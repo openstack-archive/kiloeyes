@@ -25,14 +25,14 @@ required software to run kiloeyes.
 Usage:
 ======
 You can install everything onto one machine or you can choose install different
-components onto different servers. Currently python-keystonemiddleware which
-is used by kiloeyes for security, but its dependencies conflict with agent
-dependcies, so kiloeyes currently can not co-exist with agent on a signle
-machine. It is best to have kiloeyes and agent installed onto the separate
-machines to avoid the installation headaches. This vagrant project uses
-configuration files in directory vagrant/onvm/conf. File nodes.conf.yml is
-used to configure how many nodes to install various components, ids.conf.yml
-file is used to save credentials.
+components onto different servers. It is best to have kiloeyes and agent
+installed onto the separate machines. In a typical production environment, you
+would most likely install agents onto systems that you want Kiloeyes to monitor.
+For a development environment, you can simply install everything onto one
+machine. This vagrant project uses configuration files in directory
+vagrant/onvm/conf to install various components. File nodes.conf.yml is
+used to configure how many nodes to install and what to be installed on which
+nodes. ids.conf.yml file is used to save credentials.
 
 Here is an example::
 
