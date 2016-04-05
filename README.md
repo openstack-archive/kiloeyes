@@ -30,6 +30,12 @@ install Java, Kafka and ElasticSearch if you want to know more::
     http://kafka.apache.org/documentation.html#introduction
     https://www.elastic.co/products/elasticsearch
 
+Use vagrant to setup kiloeyes and agent
+=======================================
+A vagrant sub project has been created in vagrant directory to allow users to
+setup kiloeyes and agent very easily if couple of clean machines are setup.
+[Read more on how to use the sub project](vagrant/README.md)
+
 Install Kiloeyes
 ================
 Get the source code::
@@ -136,8 +142,8 @@ directory named covhtml. Open up the index.html from a browser to see the summar
 of the unit test coverage and the details.
 
 
-Install an all-in-one kiloeyes clean ubuntu system
-==================================================
+Install an all-in-one kiloeyes onto a clean ubuntu system
+=========================================================
 
 Install java 8::
 
@@ -181,7 +187,7 @@ Install Kafka 0.9.0.0 scala 2.11 build::
          ./bin/zookeeper-server-start.sh ./config/zookeeper.properties
          ./bin/kafka-server-start.sh ./config/server.properties 
 
-    4. Try to create a topic and make sure things running all right:
+    4. Try to create a topic and make sure things running ok:
 
          ./bin/kafka-topics.sh --create --topic test --zookeeper localhost:2181 --partitions 1 --replication-factor 1
 
@@ -215,8 +221,8 @@ Install monasca-agent from the source::
 
 2. Change requirements.txt due to a bug in the monasca-agent project::
 
-        requests==2.8.1
-        psutil=3.4.2
+        pip install "requests>=2.9.1"
+        pip install "psutil>=3.4.2"
 
 3. Install the requirements::
 
@@ -247,7 +253,7 @@ should look like the following::
         keystone_url: http://192.168.15.5:5000/v3
         username: <<id to use to post data>>
         password: <<user password>>
-        project_name: service
+        project_name: <<kiloeyes project name>>
         url: null
 
     You can create a user in keystone for agent. Make sure that the user is
@@ -267,7 +273,9 @@ to be done.
 
 1. Install keystone middleware::
 
-        sudo apt-get install python-keystonemiddleware
+        apt-get update
+        apt-get -qqy install git python-dev python-pip
+        pip install keystonemiddleware
 
 2. Edit /etc/kiloeyes/kiloeyes.ini file to insert the middleware in the pipeline::
 
@@ -278,15 +286,21 @@ to be done.
         [filter:authtoken]
         paste.filter_factory = keystonemiddleware.auth_token:filter_factory
         delay_auth_decision = false
-3. Edit /etc/kiloeyes/kiloeyes.conf file to configure the middleware::
+3. Edit /etc/kiloeyes/kiloeyes.conf file to configure the middleware,The
+   following configuration assumes that the user, password, project and keystone
+   server IP are all already available. If not, use keystone commands to create
+   them. If you are using devstack, you can use demo project, demo id and its
+   password for the configuration.
 
         [keystone_authtoken]
-        identity_uri = http://<<keystone_ip>>:5000
-
-        auth_type = token
-        admin_user = admin
-        admin_password = <<admin password>>
-        admin_tenant_name = admin
+        password = <<demo-password>>
+        username = demo
+        user_domain_id = default
+        project_name = demo
+        project_domain_id = default
+        auth_type = password
+        auth_url = http://<<keystone_ip>>:5000
+        auth_uri = http://<<keystone_ip>>:5000
 
 4. Restart kiloeyes api server::
 
