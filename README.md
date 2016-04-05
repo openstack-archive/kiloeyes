@@ -30,6 +30,12 @@ install Java, Kafka and ElasticSearch if you want to know more::
     http://kafka.apache.org/documentation.html#introduction
     https://www.elastic.co/products/elasticsearch
 
+Use vagrant to setup kiloeyes and agent
+=======================================
+A vagrant sub project has been created in vagrant directory to allow users to
+setup kiloeyes and agent very easily if couple of clean machines are setup.
+[Read more on how to use the sub project](vagrant/README.md)
+
 Install Kiloeyes
 ================
 Get the source code::
@@ -136,8 +142,8 @@ directory named covhtml. Open up the index.html from a browser to see the summar
 of the unit test coverage and the details.
 
 
-Install an all-in-one kiloeyes clean ubuntu system
-==================================================
+Install an all-in-one kiloeyes onto a clean ubuntu system
+=========================================================
 
 Install java 8::
 
@@ -181,7 +187,7 @@ Install Kafka 0.9.0.0 scala 2.11 build::
          ./bin/zookeeper-server-start.sh ./config/zookeeper.properties
          ./bin/kafka-server-start.sh ./config/server.properties 
 
-    4. Try to create a topic and make sure things running all right:
+    4. Try to create a topic and make sure things running ok:
 
          ./bin/kafka-topics.sh --create --topic test --zookeeper localhost:2181 --partitions 1 --replication-factor 1
 
@@ -213,21 +219,18 @@ Install monasca-agent from the source::
 
         git clone https://github.com/openstack/monasca-agent.git
 
-2. Change requirements.txt due to a bug in the monasca-agent project::
-
-        requests==2.8.1
-        psutil=3.4.2
-
-3. Install the requirements::
+2. Install the requirements::
 
         sudo apt-get install python-dev python-pip
+        pip install "requests>=2.9.1"
+        pip install "psutil>=3.4.2"
         sudo pip install -r requirements.txt
 
-4. Install monasca agents::
+3. Install monasca agents::
 
         sudo python setup.py install
 
-5. Run the following command to create agent configurations::
+4. Run the following command to create agent configurations::
 
         sudo monasca-setup --username KEYSTONE_USERNAME --password KEYSTONE_PASSWORD --project_name KEYSTONE_PROJECT_NAME --keystone_url http://URL_OF_KEYSTONE_API:5000/v3
 
@@ -235,29 +238,29 @@ Install monasca-agent from the source::
     URL_OF_KEYSTONE_API with correct value according to your openstack
     keystone setups
 
-6. If the above runs with no errors, you need to add the following in
+5. If the above runs with no errors, you need to add the following in
 /etc/monasca/agent/supervisor.conf file::
 
         [inet_http_server]
         port = localhost:9001
 
-7. Check configuration file at /etc/monasca/agent/agent.yml, the content
+6. Check configuration file at /etc/monasca/agent/agent.yml, the content
 should look like the following::
 
         keystone_url: http://192.168.15.5:5000/v3
         username: <<id to use to post data>>
         password: <<user password>>
-        project_name: service
+        project_name: <<kiloeyes project name>>
         url: null
 
     You can create a user in keystone for agent. Make sure that the user is
     in the project named service.
 
-8. Restart monasca agent services on the machine by running the following command::
+7. Restart monasca agent services on the machine by running the following command::
 
         sudo service monasca-agent restart
 
-9. Agent log files will be in /var/log/monasca/agent directory.
+8. Agent log files will be in /var/log/monasca/agent directory.
 
 
 Enable keystone middleware for security
@@ -267,7 +270,9 @@ to be done.
 
 1. Install keystone middleware::
 
-        sudo apt-get install python-keystonemiddleware
+        apt-get update
+        apt-get -qqy install git python-dev python-pip
+        pip install keystonemiddleware
 
 2. Edit /etc/kiloeyes/kiloeyes.ini file to insert the middleware in the pipeline::
 
@@ -278,15 +283,21 @@ to be done.
         [filter:authtoken]
         paste.filter_factory = keystonemiddleware.auth_token:filter_factory
         delay_auth_decision = false
-3. Edit /etc/kiloeyes/kiloeyes.conf file to configure the middleware::
+3. Edit /etc/kiloeyes/kiloeyes.conf file to configure the middleware,The
+   following configuration assumes that the user, password, project and keystone
+   server IP are all already available. If not, use keystone commands to create
+   them. If you are using devstack, you can use demo project, demo id and its
+   password for the configuration.
 
         [keystone_authtoken]
-        identity_uri = http://<<keystone_ip>>:5000
-
-        auth_type = token
-        admin_user = admin
-        admin_password = <<admin password>>
-        admin_tenant_name = admin
+        password = <<demo-password>>
+        username = demo
+        user_domain_id = default
+        project_name = demo
+        project_domain_id = default
+        auth_type = password
+        auth_url = http://<<keystone_ip>>:5000
+        auth_uri = http://<<keystone_ip>>:5000
 
 4. Restart kiloeyes api server::
 
