@@ -20,11 +20,10 @@ try:
 except ImportError:
     import json
 
-
 class MetricValidator(object):
-    """middleware that validate the metric input stream.
+    """middleware that validate the metric or meter input stream.
 
-    This middleware checks if the input stream actually follows metric spec
+    This middleware checks if the input stream actually follows metric or meter spec
     and all the messages in the request has valid metric data. If the body
     is valid json and compliant with the spec, then the request will forward
     the request to the next in the pipeline, otherwise, it will reject the
@@ -67,26 +66,77 @@ class MetricValidator(object):
         else:
             return False
 
+    def _is_valid_meter(self, meter):
+        """Validate a message
+
+        According to the Ceilometer OldSample, the external message format is
+        {
+            "counter_name": "instance",
+            "counter_type": "gauge",
+            "counter_unit": "instance",
+            "counter_volume": 1.0,
+            "message_id": "5460acce-4fd6-480d-ab18-9735ec7b1996",
+            "project_id": "35b17138-b364-4e6a-a131-8f3099c5be68",
+            "recorded_at": "2016-04-21T00:07:20.174109",
+            "resource_id": "bd9431c1-8d69-4ad3-803a-8d4a6b89fd36",
+            "resource_metadata": {
+                "name1": "value1",
+                "name2": "value2"
+            },
+            "source": "openstack",
+            "timestamp": "2016-04-21T00:07:20.174114",
+            "user_id": "efd87807-12d2-4b38-9c70-5f5c2ac427ff"
+        }
+
+        Once this is validated, the message needs to be transformed into
+        the following internal format:
+
+        The current valid message format is as follows (interna):
+        {
+            "meter": {"something": "The meter as a JSON object"},
+            "meta": {
+                "tenantId": "the tenant ID acquired",
+                "region": "the region that the metric was submitted under",
+            },
+            "creation_time": "the time when the API received the metric",
+        }
+        """
+        if (meter.get('counter_name') and meter.get('counter_volume') and
+            meter.get('timestamp')):
+            return True
+        else:
+            return False
+
     def __call__(self, env, start_response):
         # if request starts with /datapoints/, then let it go on.
         # this login middle
-        if (env.get('PATH_INFO', '').startswith('/v2.0/metrics') and
-                env.get('REQUEST_METHOD', '') == 'POST'):
+        if ((env.get('PATH_INFO', '').startswith('/v2.0/metrics') and
+                env.get('REQUEST_METHOD', '') == 'POST') or
+           (env.get('PATH_INFO', '').startswith('/v2.0/meters') and
+                env.get('REQUEST_METHOD', '') == 'POST')):
             # We only check the requests which are posting against metrics
-            # endpoint
+            # or meters endpoint
             try:
+                is_metric = env.get('PATH_INFO', '').startswith('/v2.0/metrics')
                 body = env['wsgi.input'].read()
-                metrics = json.loads(body)
+                _inputs = json.loads(body)
                 # Do business logic validation here.
                 is_valid = True
-                if isinstance(metrics, list):
-                    for metric in metrics:
-                        if not self._is_valid_metric(metric):
-                            is_valid = False
-                            break
+                if isinstance(_inputs, list):
+                    for _input in _inputs:
+                        if(is_metric):
+                            if not self._is_valid_metric(_input):
+                                is_valid = False
+                                break
+                        else:
+                            if not self._is_valid_meter(_input):
+                                is_valid = False
+                                break
                 else:
-                    is_valid = self._is_valid_metric(metrics)
-
+                    if(is_metric):
+                        is_valid = self._is_valid_metric(_input)
+                    else:
+                        is_valid = self._is_valid_meter(_input)
                 if is_valid:
                     # If the message is valid, then wrap it into this internal
                     # format. The tenantId should be available from the
@@ -98,10 +148,16 @@ class MetricValidator(object):
                     # TODO(HP) Add logic to get region id from request header
                     # HTTP_X_SERVICE_CATALOG, then find endpoints, then region
                     region_id = None
-                    msg = {'metric': metrics,
-                           'meta': {'tenantId': env.get('HTTP_X_PROJECT_ID'),
-                                    'region': region_id},
-                           'creation_time': datetime.datetime.now()}
+                    if(is_metric):
+                        msg = {'metric': metrics,
+                               'meta': {'tenantId': env.get('HTTP_X_PROJECT_ID'),
+                                        'region': region_id},
+                               'creation_time': datetime.datetime.now()}
+                    else:
+                        msg = {'meter': metrics,
+                               'meta': {'tenantId': env.get('HTTP_X_PROJECT_ID'),
+                                        'region': region_id},
+                               'creation_time': datetime.datetime.now()}
                     env['wsgi.input'] = StringIO.StringIO(json.dumps(msg))
                     return self.app(env, start_response)
             except Exception:
