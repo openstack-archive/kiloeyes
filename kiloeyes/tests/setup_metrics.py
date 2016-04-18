@@ -75,32 +75,34 @@ def setup_metrics(argv):
                         print(json.dumps(MOLD))
                         print('StatusCode is %s' % res.status_code)
                         exit(0)
-                # multiple messages
-                for k in range(3):
-                    msg = "["
-                    factor = round(random.random(), 2) * 100
-                    MOLD['timestamp'] = the_time + k * 50000 * factor
-                    MOLD['value'] = i * j * k * random.random()
-                    msg += json.dumps(MOLD)
-
-                    for l in range(9):
+                # multiple messages in one request
+                if argv[2] == 'true':
+                    for k in range(3):
+                        msg = "["
                         factor = round(random.random(), 2) * 100
                         MOLD['timestamp'] = the_time + k * 50000 * factor
                         MOLD['value'] = i * j * k * random.random()
-                        msg += ',' + json.dumps(MOLD)
-                    msg += "]"
-                    res = requests.post(argv[1], data=msg)
+                        msg += json.dumps(MOLD)
 
-                    if res.status_code != 201 and res.status_code != 204:
-                        print(json.dumps(MOLD))
-                        print('StatusCode is %s' % res.status_code)
-                        exit(0)
+                        for l in range(9):
+                            factor = round(random.random(), 2) * 100
+                            MOLD['timestamp'] = the_time + k * 50000 * factor
+                            MOLD['value'] = i * j * k * random.random()
+                            msg += ',' + json.dumps(MOLD)
+                        msg += "]"
+                        res = requests.post(argv[1], data=msg)
+
+                        if res.status_code != 201 and res.status_code != 204:
+                            print(json.dumps(MOLD))
+                            print('StatusCode is %s' % res.status_code)
+                            exit(0)
+
         del MOLD_DIMENSIONS['key_' + str(a)]
         print('round finished %s' % a)
 
 if __name__ == '__main__':
-    if len(sys.argv) == 2:
+    if len(sys.argv) == 3:
         setup_metrics(sys.argv)
     else:
         print('Usage: setup_metrics endpoint. For example:')
-        print('       setup_metrics http://<host_ip>:9090/v20/metrics')
+        print('       setup_metrics http://<host_ip>:9090/v2.0/metrics false')
