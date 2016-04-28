@@ -108,6 +108,13 @@ class MeterDispatcher(object):
         ["dimensions_hash","timestamp","value"]},"size":1}}}}}}}
         """
 
+        self._oldsample_agg = """
+        {"by_name":{"terms":{"field":"name","size":%(size)d},
+        "aggs":{"by_dim":{"terms":{"field":"dimensions_hash","size":%(size)d},
+        "aggs":{"meters":{"top_hits":{"_source":{"exclude":
+        ["dimensions_hash"]},"size":1}}}}}}}
+        """
+
         self.setup_index_template()
 
     def setup_index_template(self):
@@ -127,9 +134,9 @@ class MeterDispatcher(object):
 
     def post_data(self, req, res):
         msg = ""
-        LOG.debug('@$Post Message is %s' % msg)
         LOG.debug('Getting the call.')
         msg = req.stream.read()
+        LOG.debug('@$Post Message is %s' % msg)
 
         code = self._kafka_conn.send_messages(msg)
         res.status = getattr(falcon, 'HTTP_' + str(code))
@@ -144,7 +151,7 @@ class MeterDispatcher(object):
             return None
 
     @resource_api.Restify('/v2.0/meters', method='get')
-    def get_meter(self, req, res):
+    def get_meters(self, req, res):
         LOG.debug('The meters GET request is received')
 
         # process query condition
@@ -203,6 +210,77 @@ class MeterDispatcher(object):
         else:
             res.body = ''
 
-    @resource_api.Restify('/v2.0/meters/', method='post')
+    @resource_api.Restify('/v2.0/meters', method='post')
     def post_meters(self, req, res):
         self.post_data(req, res)
+
+    @resource_api.Restify('/v2.0/meters/{meter_name}', method='get')
+    def get_meter_byname(self, req, res, meter_name):
+        LOG.debug('The meter %s sample GET request is received' % meter_name)
+
+        # process query condition
+        query = []
+        metrics.ParamUtil.common(req, query)
+        _meter_ag = self._oldsample_agg % {"size": self.size}
+        if query:
+            body = ('{"query":{"bool":{"must":' + json.dumps(query) + '}},'
+                    '"size":' + str(self.size) + ','
+                    '"aggs":' + _meter_ag + '}')
+        else:
+            body = '{"aggs":' + _meter_ag + '}'
+
+        # modify the query url to filter out name
+        query_url = []
+        if meter_name:
+            query_url = self._query_url + '&q=name:' + meter_name
+        else:
+            query_url = self._query_url
+        LOG.debug('Request body:' + body)
+        LOG.debug('Request url:' + query_url)
+        es_res = requests.post(query_url, data=body)
+        res.status = getattr(falcon, 'HTTP_%s' % es_res.status_code)
+
+        LOG.debug('Query to ElasticSearch returned: %s' % es_res.status_code)
+        res_data = self._get_agg_response(es_res)
+        LOG.debug('@$Result data is %s\n' % res_data)
+        if res_data:
+            # convert the response into ceilometer meter OldSample format
+            aggs = res_data['by_name']['buckets']
+            flag = {'is_first': True}
+
+            def _render_hits(item):
+                _type = item['meters']['hits']['hits'][0]['_type']
+                _source = item['meters']['hits']['hits'][0]['_source']
+                rslt = ('{"counter_name":' + json.dumps(_source['name']) + ','
+                        '"counter_type":' + json.dumps(_type) + ','
+                        '"counter_unit":null,'
+                        '"counter_volume":' +
+                        json.dumps(_source['value']) + ','
+                        '"message_id":null,'
+                        '"project_id":' +
+                        json.dumps(_source['project_id']) + ','
+                        '"recorded_at":null,'
+                        '"resource_id":' +
+                        json.dumps(_source['tenant_id']) + ','
+                        '"resource_metadata":null,'
+                        '"source":' + json.dumps(_source['user_agent']) + ','
+                        '"timestamp":' + json.dumps(_source['timestamp']) + ','
+                        '"user_id":' + json.dumps(_source['user_id']) + '}')
+                if flag['is_first']:
+                    flag['is_first'] = False
+                    return rslt
+                else:
+                    return ',' + rslt
+
+            def _make_body(buckets):
+                yield '['
+                for by_name in buckets:
+                    if by_name['by_dim']:
+                        for by_dim in by_name['by_dim']['buckets']:
+                            yield _render_hits(by_dim)
+                yield ']'
+
+            res.body = ''.join(_make_body(aggs))
+            res.content_type = 'application/json;charset=utf-8'
+        else:
+            res.body = ''

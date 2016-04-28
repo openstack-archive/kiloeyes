@@ -231,6 +231,7 @@ class MetricDispatcher(object):
     def post_data(self, req, res):
         LOG.debug('Getting the call.')
         msg = req.stream.read()
+        LOG.debug('@Post: %s' % msg)
 
         code = self._kafka_conn.send_messages(msg)
         res.status = getattr(falcon, 'HTTP_' + str(code))

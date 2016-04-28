@@ -58,6 +58,22 @@ class TestMeterDispatcher(base.BaseTestCase):
             with mock.patch.object(requests, 'put', return_value=put_res):
                 self.dispatcher = meters.MeterDispatcher({})
 
+        self.response_str = """
+        {"aggregations":{"by_name":{"doc_count_error_upper_bound":0,
+        "sum_other_doc_count":0,"buckets":[{"key":"BABMGD","doc_count":300,
+        "by_dim":{"buckets":[{"key": "64e6ce08b3b8547b7c32e5cfa5b7d81f",
+        "doc_count":300,"meters":{"hits":{"hits":[{ "_type": "metrics",
+        "_id": "AVOziWmP6-pxt0dRmr7j", "_index": "data_20160401000000",
+        "_source":{"name":"BABMGD", "value": 4,
+        "timestamp": 1461337094000,
+        "dimensions_hash": "0afdb86f508962bb5d8af52df07ef35a",
+        "project_id": "35b17138-b364-4e6a-a131-8f3099c5be68",
+        "tenant_id": "bd9431c1-8d69-4ad3-803a-8d4a6b89fd36",
+        "user_agent": "openstack", "dimensions": null,
+        "user": "admin", "value_meta": null, "tenant": "admin",
+        "user_id": "efd87807-12d2-4b38-9c70-5f5c2ac427ff"}}]}}}]}}]}}}
+        """
+
     def test_initialization(self):
         # test that the kafka connection uri should be 'fake' as it was passed
         # in from configuration
@@ -104,27 +120,12 @@ class TestMeterDispatcher(base.BaseTestCase):
         req.get_param.side_effect = _side_effect
 
         req_result = mock.Mock()
-        response_str = """
-        {"aggregations":{"by_name":{"doc_count_error_upper_bound":0,
-        "sum_other_doc_count":0,"buckets":[{"key":"BABMGD","doc_count":300,
-        "by_dim":{"buckets":[{"key": "64e6ce08b3b8547b7c32e5cfa5b7d81f",
-        "doc_count":300,"meters":{"hits":{"hits":[{ "_type": "metrics",
-        "_id": "AVOziWmP6-pxt0dRmr7j", "_index": "data_20160401000000",
-        "_source":{"name":"BABMGD", "value": 4,
-        "timestamp": 1461337094000,
-        "dimensions_hash": "0afdb86f508962bb5d8af52df07ef35a",
-        "project_id": "35b17138-b364-4e6a-a131-8f3099c5be68",
-        "tenant_id": "bd9431c1-8d69-4ad3-803a-8d4a6b89fd36",
-        "user_agent": "openstack", "dimensions": null,
-        "user": "admin", "value_meta": null, "tenant": "admin",
-        "user_id": "efd87807-12d2-4b38-9c70-5f5c2ac427ff"}}]}}}]}}]}}}
-        """
 
-        req_result.json.return_value = json.loads(response_str)
+        req_result.json.return_value = json.loads(self.response_str)
         req_result.status_code = 200
 
         with mock.patch.object(requests, 'post', return_value=req_result):
-            self.dispatcher.get_meter(req, res)
+            self.dispatcher.get_meters(req, res)
 
         # test that the response code is 200
         self.assertEqual(res.status, getattr(falcon, 'HTTP_200'))
@@ -145,3 +146,35 @@ class TestMeterDispatcher(base.BaseTestCase):
             self.dispatcher.post_meters(mock.Mock(), res)
 
         self.assertEqual(getattr(falcon, 'HTTP_204'), res.status)
+
+    def test_get_meter_byname(self):
+        res = mock.Mock()
+        req = mock.Mock()
+
+        def _side_effect(arg):
+            if arg == 'name':
+                return 'tongli'
+            elif arg == 'dimensions':
+                return 'key1:100, key2:200'
+        req.get_param.side_effect = _side_effect
+
+        req_result = mock.Mock()
+
+        req_result.json.return_value = json.loads(self.response_str)
+        req_result.status_code = 200
+
+        with mock.patch.object(requests, 'post', return_value=req_result):
+            self.dispatcher.get_meter_byname(req, res, "BABMGD")
+
+        # test that the response code is 200
+        self.assertEqual(res.status, getattr(falcon, 'HTTP_200'))
+        obj = json.loads(res.body)
+        self.assertEqual(obj[0]['counter_name'], 'BABMGD')
+        self.assertEqual(obj[0]['counter_type'], 'metrics')
+        self.assertEqual(obj[0]['user_id'],
+                         'efd87807-12d2-4b38-9c70-5f5c2ac427ff')
+        self.assertEqual(obj[0]['project_id'],
+                         '35b17138-b364-4e6a-a131-8f3099c5be68')
+        self.assertEqual(obj[0]['counter_volume'], 4)
+        self.assertEqual(obj[0]['timestamp'], 1461337094000)
+        self.assertEqual(len(obj), 1)
