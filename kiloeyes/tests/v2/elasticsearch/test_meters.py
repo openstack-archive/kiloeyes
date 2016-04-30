@@ -19,6 +19,7 @@ from oslotest import base
 import requests
 
 from kiloeyes.common import kafka_conn
+from kiloeyes.common import timeutils as tu
 from kiloeyes.v2.elasticsearch import meters
 
 try:
@@ -178,3 +179,62 @@ class TestMeterDispatcher(base.BaseTestCase):
         self.assertEqual(obj[0]['counter_volume'], 4)
         self.assertEqual(obj[0]['timestamp'], 1461337094000)
         self.assertEqual(len(obj), 1)
+
+    def test_do_get_statistics(self):
+        res = mock.Mock()
+        req = mock.Mock()
+
+        def _side_effect(arg):
+            if arg == 'name':
+                return 'tongli'
+            elif arg == 'dimensions':
+                return 'key1:100, key2:200'
+            elif arg == 'start_time':
+                return '2014-01-01'
+            elif arg == 'end_time':
+                return None
+            elif arg == 'period':
+                return None
+            elif arg == 'statistics':
+                return 'avg, sum, max'
+
+        req.get_param.side_effect = _side_effect
+
+        req_result = mock.Mock()
+        response_str = """
+        {"took":2006,"timed_out":false,"_shards":{"total":5,"successful":5,
+        "failed":0},"hits":{"total":600,"max_score":0.0,"hits":[]},
+        "aggregations":{"by_name":{"doc_count_error_upper_bound":0,
+        "sum_other_doc_count":0,"buckets":[{"key":"BABMGD","doc_count":300,
+        "by_dim":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,
+        "buckets":[{"key":"64e6ce08b3b8547b7c32e5cfa5b7d81f","doc_count":300,
+        "periods":{"buckets":[{"key":1421700000,"doc_count":130,
+        "statistics":{"count":130,"min":0.0,"max":595.0274095324651,
+        "avg":91.83085293930924,"sum":11938.0108821102}},
+        {"key":1422000000,"doc_count":170,"statistics":{"count":170,
+        "min":0.0,"max":1623.511307756313,"avg":324.69434786459897,
+        "sum":55198.039136981824}}]},"dimension":{"hits":{"total":300,
+        "max_score":1.4142135,"hits":[{"_index":"data_20150121",
+        "_type":"metrics","_id":"AUsSNF5mTZaMxA7_wmFx","_score":1.4142135,
+        "_source":{"name":"BABMGD","dimensions":{"key2":"NVITDU",
+        "key1":"FUFMPY","key_43":"ROQBZM"}}}]}}}]}}]}}}
+        """
+
+        req_result.json.return_value = json.loads(response_str)
+
+        req_result.status_code = 200
+
+        with mock.patch.object(requests, 'post', return_value=req_result):
+            self.dispatcher.get_meter_statistics(req, res, 'BABMGD')
+
+        # test that the response code is 200
+        self.assertEqual(res.status, getattr(falcon, 'HTTP_200'))
+        print(res.body)
+        obj = json.loads(res.body)
+        # there should be total of 2 objects
+        self.assertEqual(len(obj), 2)
+        self.assertEqual(obj[0]['avg'], 91.8308529393)
+        self.assertEqual(obj[1]['max'], 1623.51130776)
+        self.assertEqual(obj[1]['period'], 300)
+        self.assertEqual(obj[0]['duration_start'],
+                         tu.iso8601_from_timestamp(1421700000))

@@ -36,3 +36,7 @@ class V2API(object):
     @resource_api.Restify('/v2.0/meters/{meter_name}', method='get')
     def get_meter_byname(self, req, res, meter_name):
         res.status = '501 Not Implemented'
+
+    @resource_api.Restify('/v2.0/meters/{meter_name}/statistics', method='get')
+    def get_meter_statistics(self, req, res, meter_name):
+        res.status = '501 Not Implemented'

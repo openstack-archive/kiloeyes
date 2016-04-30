@@ -23,6 +23,7 @@ from kiloeyes.common import es_conn
 from kiloeyes.common import kafka_conn
 from kiloeyes.common import namespace
 from kiloeyes.common import resource_api
+from kiloeyes.common import timeutils as tu
 from kiloeyes.v2.elasticsearch import metrics
 
 try:
@@ -113,6 +114,16 @@ class MeterDispatcher(object):
         "aggs":{"by_dim":{"terms":{"field":"dimensions_hash","size":%(size)d},
         "aggs":{"meters":{"top_hits":{"_source":{"exclude":
         ["dimensions_hash"]},"size":1}}}}}}}
+        """
+
+        self._meter_stats_agg = """
+        {"by_name":{"terms":{"field":"name","size":%(size)d},
+        "aggs":{"by_dim":{"terms":{"field":"dimensions_hash",
+        "size":%(size)d},"aggs":{"dimension":{"top_hits":{"_source":
+        {"exclude":["dimensions_hash","timestamp","value"]},"size":1}},
+        "periods":{"date_histogram":{"field":"timestamp",
+        "interval":"%(period)s"},"aggs":{"statistics":{"stats":
+        {"field":"value"}}}}}}}}}
         """
 
         self.setup_index_template()
@@ -284,3 +295,103 @@ class MeterDispatcher(object):
             res.content_type = 'application/json;charset=utf-8'
         else:
             res.body = ''
+
+    @resource_api.Restify('/v2.0/meters/{meter_name}/statistics', method='get')
+    def get_meter_statistics(self, req, res, meter_name):
+        LOG.debug('The meter %s statistics GET request is received' %
+                  meter_name)
+        # process query conditions
+        query = []
+        metrics.ParamUtil.common(req, query)
+        period = metrics.ParamUtil.period(req)
+
+        _stats_ag = (self._meter_stats_agg %
+                     {"size": self.size, "period": period})
+        if query:
+            body = ('{"query":{"bool":{"must":' + json.dumps(query) + '}},'
+                    '"size":' + str(self.size) + ','
+                    '"aggs":' + _stats_ag + '}')
+        else:
+            body = '{"aggs":' + _stats_ag + '}'
+
+        # modify the query url to filter out name
+        query_url = []
+        if meter_name:
+            query_url = self._query_url + '&q=name:' + meter_name
+        else:
+            query_url = self._query_url
+        es_res = requests.post(query_url, data=body)
+        res.status = getattr(falcon, 'HTTP_%s' % es_res.status_code)
+
+        LOG.debug('Query to ElasticSearch returned: %s' % es_res.status_code)
+        res_data = self._get_agg_response(es_res)
+        if res_data:
+            # convert the response into Ceilometer Statistics format
+            aggs = res_data['by_name']['buckets']
+
+            LOG.debug('@$Stats: %s' % json.dumps(aggs))
+
+            def _render_stats(dim):
+                is_first = True
+                oldest_time = []
+                previous_time = []
+                for item in dim['periods']['buckets']:
+                    current_time = item['key']
+                    # calculte period and duration difference
+                    if is_first:
+                        period_diff = 'null'
+                        oldest_time = current_time
+                        duration_diff = 'null'
+                        previous_time = current_time
+                    else:
+                        period_diff = (current_time - previous_time) / 1000
+                        duration_diff = (current_time - oldest_time) / 1000
+                    # parses the statistics data
+                    _max = str(item['statistics']['max'])
+                    _min = str(item['statistics']['min'])
+                    _sum = str(item['statistics']['sum'])
+                    _avg = str(item['statistics']['avg'])
+                    _count = str(item['statistics']['count'])
+                    curr_timestamp = tu.iso8601_from_timestamp(current_time)
+                    prev_timestamp = tu.iso8601_from_timestamp(previous_time)
+                    old_timestamp = tu.iso8601_from_timestamp(oldest_time)
+                    rslt = ('{"avg":' + _avg + ','
+                            '"count":' + _count + ','
+                            '"duration":' + str(duration_diff) + ','
+                            '"duration_end":' +
+                            '"%s"' % str(curr_timestamp) + ','
+                            '"duration_start":' +
+                            '"%s"' % str(old_timestamp) + ','
+                            '"max":' + _max + ','
+                            '"min":' + _min + ','
+                            '"period":' + str(period_diff) + ','
+                            '"period_end":' +
+                            '"%s"' % str(curr_timestamp) + ','
+                            '"period_start":' +
+                            '"%s"' % str(prev_timestamp) + ','
+                            '"sum":' + _sum + ','
+                            '"unit":null}')
+                    previous_time = current_time
+                    if is_first:
+                        yield rslt
+                        is_first = False
+                    else:
+                        yield ',' + rslt
+
+            def _make_body(items):
+                is_first = True
+                yield '['
+                for metric in items:
+                    for dim in metric['by_dim']['buckets']:
+                        if is_first:
+                            is_first = False
+                        else:
+                            yield ','
+                        for result in _render_stats(dim):
+                            yield result
+                yield ']'
+
+            res.body = ''.join(_make_body(aggs))
+            res.content_type = 'application/json;charset=utf-8'
+        else:
+            res.body = 'o'
