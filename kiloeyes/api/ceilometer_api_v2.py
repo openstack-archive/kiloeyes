@@ -40,3 +40,11 @@ class V2API(object):
     @resource_api.Restify('/v2.0/meters/{meter_name}/statistics', method='get')
     def get_meter_statistics(self, req, res, meter_name):
         res.status = '501 Not Implemented'
+
+    @resource_api.Restify('/v2.0/samples', method='get')
+    def get_samples(self, req, res):
+        res.status = '501 Not Implemented'
+
+    @resource_api.Restify('/v2.0/samples/{sample_id}', method='get')
+    def get_sample_byid(self, req, res, sample_id):
+        res.status = '501 Not Implemented'
