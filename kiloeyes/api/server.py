@@ -47,6 +47,7 @@ def api_app(conf):
 
     log.setup(cfg.CONF, name)
 
+    LOG.debug("@API CONF: %s" % cfg.CONF.dispatcher)
     dispatcher_manager = named.NamedExtensionManager(
         namespace=namespace.DISPATCHER_NS,
         names=cfg.CONF.dispatcher,
@@ -64,6 +65,7 @@ def api_app(conf):
     # add each dispatcher to the application to serve requests offered by
     # each dispatcher
     for driver in dispatcher_manager:
+        LOG.debug("@API Dispatcher: %s" % driver.obj)
         app.add_route(None, driver.obj)
 
     LOG.debug('Dispatcher drivers have been added to the routes!')
