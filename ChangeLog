@@ -1,6 +1,9 @@
 CHANGES
 =======
 
+* Implemented middleware to augment POSTed metrics with keystone metadata
+* make the setup_metrics configurable
+* Meter Get Statistics by name implemented
 * Meter Get_Meter_Byname implemented
 * Meters GET request implemented
 * Added more instructions on how to configure keystone middleware

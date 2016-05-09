@@ -33,21 +33,34 @@ class KeystoneAugmenter(object):
         self.app = app
         self.conf = conf
 
+    # Examines HTTP headers, and adds keystone metadata to metrics
     def add_keystone_to_metrics(self, env):
-        body = env['wsgi.input'].read()
-        metrics = json.loads(body)
+        try:
+            body = env['wsgi.input'].read()
+            metrics = json.loads(body)
 
-        # Add keystone data to metrics
-        if isinstance(metrics, list):
-            for metric in metrics:
-                metric['tenant'] = env['HTTP_X_TENANT']
-                metric['tenant_id'] = env['HTTP_X_TENANT_ID']
-                metric['user'] = env['HTTP_X_USER']
-                metric['user_agent'] = env['HTTP_USER_AGENT']
-                metric['project_id'] = env['HTTP_X_PROJECT_ID']
-                metric['user_id'] = env['HTTP_X_USER_ID']
+            # Add keystone data to metrics list or single metric
+            if isinstance(metrics, list):
+                for metric in metrics:
+                    metric['tenant'] = env['HTTP_X_TENANT']
+                    metric['tenant_id'] = env['HTTP_X_TENANT_ID']
+                    metric['user'] = env['HTTP_X_USER']
+                    metric['user_agent'] = env['HTTP_USER_AGENT']
+                    metric['project_id'] = env['HTTP_X_PROJECT_ID']
+                    metric['user_id'] = env['HTTP_X_USER_ID']
+            else:
+                    metrics['tenant'] = env['HTTP_X_TENANT']
+                    metrics['tenant_id'] = env['HTTP_X_TENANT_ID']
+                    metrics['user'] = env['HTTP_X_USER']
+                    metrics['user_agent'] = env['HTTP_USER_AGENT']
+                    metrics['project_id'] = env['HTTP_X_PROJECT_ID']
+                    metrics['user_id'] = env['HTTP_X_USER_ID']
 
-        env['wsgi.input'] = StringIO.StringIO(json.dumps(metrics))
+            env['wsgi.input'] = StringIO.StringIO(json.dumps(metrics))
+            return env
+        # If exception occurs, pass request as is without augmenting
+        except Exception:
+            pass
         return env
 
     def __call__(self, env, start_response):

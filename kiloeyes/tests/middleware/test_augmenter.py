@@ -29,7 +29,46 @@ class TestKeystoneAugmenter(base.BaseTestCase):
                 super(TestKeystoneAugmenter, self).setUp()
                 self.augmenter = keystone_augmenter.KeystoneAugmenter({}, {})
 
-        def test_call(self):
+        # Tests keystone augmenter on a single metric
+        def test_augment_metric(self):
+                test_input = {
+                    'name': 'test_metric',
+                    'timestamp': 1234567890,
+                    'dimensions': {'service': 'test_service'}
+                }
+
+                input_json = StringIO.StringIO(json.dumps(test_input))
+
+                env = {
+                    'wsgi.input': input_json,
+                    'HTTP_X_TENANT': 'test',
+                    'HTTP_X_TENANT_ID': 'testid',
+                    'HTTP_X_USER': 'test_user',
+                    'HTTP_USER_AGENT': 'kiloeyes-tester',
+                    'HTTP_X_PROJECT_ID': 'projidtest',
+                    'HTTP_X_USER_ID': 'testuid'
+                }
+
+                metric_expected = {
+                    'name': 'test_metric',
+                    'timestamp': 1234567890,
+                    'dimensions': {'service': 'test_service'},
+                    'tenant': 'test',
+                    'tenant_id': 'testid',
+                    'user': 'test_user',
+                    'user_agent': 'kiloeyes-tester',
+                    'project_id': 'projidtest',
+                    'user_id': 'testuid'
+                }
+
+                augmented_env = self.augmenter.add_keystone_to_metrics(env)
+
+                metric_res = json.loads(augmented_env['wsgi.input'].read())
+
+                self.assertEqual(metric_expected, metric_res)
+
+        # Tests keystone augmenter on a list of metrics
+        def test_augment_list(self):
                 test_input = [
                     {
                         'name': 'metric1',
