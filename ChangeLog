@@ -1,6 +1,7 @@
 CHANGES
 =======
 
+* Added comments and error handling to keystone_augmenter middleware. Added test for single metric to test_augmenter. Added keystone_augmenter filter egg to etc/kiloeyes.ini
 * Implemented middleware to augment POSTed metrics with keystone metadata
 * make the setup_metrics configurable
 * Meter Get Statistics by name implemented

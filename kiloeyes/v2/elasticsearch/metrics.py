@@ -252,6 +252,15 @@ class MetricDispatcher(object):
         # process query conditions
         query = []
         ParamUtil.common(req, query)
+
+        # if there is keystone tenant information, match tenant id only
+        try:
+            tenantID = req.env['HTTP_X_TENANT_ID']
+            query.append({"match": {"tenant_id": tenantID}})
+        except Exception:
+            LOG.debug("No tenant information found in GET")
+            pass
+        LOG.debug(query)
         _metrics_ag = self._metrics_agg % {"size": self.size}
         if query:
             body = ('{"query":{"bool":{"must":' + json.dumps(query) + '}},'
@@ -303,6 +312,15 @@ class MetricDispatcher(object):
         # process query conditions
         query = []
         ParamUtil.common(req, query)
+
+        # if there is keystone tenant information, match tenant id only
+        try:
+            tenantID = req.env['HTTP_X_TENANT_ID']
+            query.append({"match": {"tenant_id": tenantID}})
+        except Exception:
+            LOG.debug("No tenant information found in GET")
+            pass
+        LOG.debug(query)
         _measure_ag = self._measure_agg % {"size": self.size}
         if query:
             body = ('{"query":{"bool":{"must":' + json.dumps(query) + '}},'
@@ -362,6 +380,15 @@ class MetricDispatcher(object):
         # process query conditions
         query = []
         ParamUtil.common(req, query)
+
+        # if there is keystone tenant info, match tenant id only
+        try:
+            tenantID = req.env['HTTP_X_TENANT_ID']
+            query.append({"match": {"tenant_id": tenantID}})
+        except Exception:
+            LOG.debug("No tenant information found in GET")
+            pass
+
         period = ParamUtil.period(req)
         stats = ParamUtil.stats(req)
 
