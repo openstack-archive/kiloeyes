@@ -177,7 +177,8 @@ class TestMeterDispatcher(base.BaseTestCase):
         self.assertEqual(obj[0]['project_id'],
                          '35b17138-b364-4e6a-a131-8f3099c5be68')
         self.assertEqual(obj[0]['counter_volume'], 4)
-        self.assertEqual(obj[0]['timestamp'], 1461337094000)
+        self.assertEqual(obj[0]['timestamp'],
+                         tu.iso8601_from_timestamp(1461337094000))
         self.assertEqual(len(obj), 1)
 
     def test_do_get_statistics(self):
