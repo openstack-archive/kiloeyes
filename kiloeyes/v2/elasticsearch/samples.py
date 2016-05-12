@@ -23,7 +23,7 @@ from kiloeyes.common import es_conn
 from kiloeyes.common import kafka_conn
 from kiloeyes.common import namespace
 from kiloeyes.common import resource_api
-from kiloeyes.v2.elasticsearch import metrics
+from kiloeyes.v2.elasticsearch import meters
 
 try:
     import ujson as json
@@ -173,15 +173,8 @@ class CeilometerSampleDispatcher(object):
         LOG.debug('The samples GET request is received')
 
         # process query condition
-        query = []
-        metrics.ParamUtil.common(req, query)
         _samples_ag = self._sample_agg % {"size": self.size}
-        if query:
-            body = ('{"query":{"bool":{"must":' + json.dumps(query) + '}},'
-                    '"size":' + str(self.size) + ','
-                    '"aggs":' + _samples_ag + '}')
-        else:
-            body = '{"aggs":' + _samples_ag + '}'
+        body = meters.ParamUtil.filtering(req, _samples_ag, self.size, None)
 
         LOG.debug('Request body:' + body)
         LOG.debug('Request url:' + self._query_url)
@@ -204,15 +197,8 @@ class CeilometerSampleDispatcher(object):
         LOG.debug('The sample %s GET request is received' % sample_id)
 
         # process query condition
-        query = []
-        metrics.ParamUtil.common(req, query)
         _sample_ag = self._sample_agg % {"size": self.size}
-        if query:
-            body = ('{"query":{"bool":{"must":' + json.dumps(query) + '}},'
-                    '"size":' + str(self.size) + ','
-                    '"aggs":' + _sample_ag + '}')
-        else:
-            body = '{"aggs":' + _sample_ag + '}'
+        body = meters.ParamUtil.filtering(req, _sample_ag, self.size, None)
 
         # modify the query url to filter out name
         query_url = []
