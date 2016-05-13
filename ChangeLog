@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+* Sample Get and Get-by-id implemented
+* Meter Get Statistics by name implemented
 * Meter Get_Meter_Byname implemented
 * Meters GET request implemented
 * Added more instructions on how to configure keystone middleware
