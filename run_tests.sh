@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# rende: this is the test patch set from china dojo
+
 set -eu
 
 function usage {
