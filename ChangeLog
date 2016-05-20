@@ -1,32 +1,7 @@
-CHANGES
-=======
+kiloeyes (1.0)
 
-* Sample Get and Get-by-id implemented
-* Meter Get Statistics by name implemented
-* Meter Get_Meter_Byname implemented
-* Meters GET request implemented
-* Added more instructions on how to configure keystone middleware
-* move up one more dependencies
-* Move to the same level of dependencies as other openstack project
-* Added more functions for the vagrant sub project
-* Move out the binary files folder out of the project
-* Restructure the vagrant scripts and fix a dependency error
-* Changed vagrant file so that installation can be easier
-* Remove sphinx requires from test-requirements
-* Reformat the readme.MD file and update the listOpt in kafka_conn.py
-* Make sure that the index field mapping is correct
-* ES now returns timestamp as milliseconds vs seconds
-* enable bulk message post on persister
-* Added more instructions
-* bulk insert can not be done implicitly
-* fix the partitions data type error
-* Updated the installation instructions
-* added more instruction on how to create an all-in-one kiloeyes
-* unit test passed for py27
-* Add Vagrant sample file to ease development environment bootstrap
-* Make the server more flexible with configuration files
-* remove old openstack incubator project reference
-* remove old oslo.config and use new oslo_config
-* Make minor modifications in the README
-* seeding the project
-* Added .gitreview
+    * Initial project setup
+      Choose framework of wsgiref, pasteDeploy, falcon.
+      The server will be wsgiref server like any other OpenStack server
+      Use PasteDeploy to allow WSGI pipelines
+      Use Falcon framework to implement ReSTful API services
