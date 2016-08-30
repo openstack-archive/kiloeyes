@@ -60,20 +60,20 @@ class TestAlarmExprParser(tests.BaseTestCase):
 
     def test_wrong_input(self):
         expr = alarm_expr_parser.AlarmExprParser(self.expr3).parse_result
-        self.assertEqual(None, expr)
+        self.assertIsNone(expr)
         expr = alarm_expr_parser.AlarmExprParser(self.expr4).parse_result
-        self.assertEqual(None, expr)
+        self.assertIsNone(expr)
         expr = alarm_expr_parser.AlarmExprParser(self.expr5).parse_result
-        self.assertEqual(None, expr)
+        self.assertIsNone(expr)
         expr = alarm_expr_parser.AlarmExprParser(self.expr6).parse_result
-        self.assertEqual(None, expr)
+        self.assertIsNone(expr)
         expr = alarm_expr_parser.AlarmExprParser(self.expr7).parse_result
-        self.assertEqual(None, expr)
+        self.assertIsNone(expr)
 
     def test_logic(self):
         expr = alarm_expr_parser.AlarmExprParser(self.expr0).parse_result
         self.assertEqual(u'AND', expr.logic_operator)
-        self.assertEqual(None, expr.sub_expr_list[0].logic_operator)
+        self.assertIsNone(expr.sub_expr_list[0].logic_operator)
         self.assertEqual(u'OR', expr.sub_expr_list[1].logic_operator)
         self.assertEqual(u'AND', expr.sub_expr_list[1].
                          sub_expr_list[1].logic_operator)
@@ -81,13 +81,13 @@ class TestAlarmExprParser(tests.BaseTestCase):
         expr = alarm_expr_parser.AlarmExprParser(self.expr1).parse_result
         self.assertEqual(u'AND', expr.logic_operator)
         self.assertEqual('OR', expr.sub_expr_list[1].logic_operator)
-        self.assertEqual(None, expr.sub_expr_list[0].logic_operator)
+        self.assertIsNone(expr.sub_expr_list[0].logic_operator)
         self.assertEqual(
             'max(foo{hostname=mini-mon,千=千}, 120) > 100'.decode('utf8'),
             expr.sub_expr_list[0].fmtd_sub_expr_str)
 
         expr = alarm_expr_parser.AlarmExprParser(self.expr2).parse_result
-        self.assertEqual(None, expr.logic_operator)
+        self.assertIsNone(expr.logic_operator)
 
     def test_expr(self):
         expr = alarm_expr_parser.AlarmExprParser(self.expr0).parse_result
@@ -199,4 +199,4 @@ class TestAlarmExprParser(tests.BaseTestCase):
     def test_wrong_format_expr(self):
         sub_expr_list = (alarm_expr_parser.AlarmExprParser(self.expr8).
                          sub_expr_list)
-        self.assertEqual(None, sub_expr_list)
+        self.assertIsNone(sub_expr_list)

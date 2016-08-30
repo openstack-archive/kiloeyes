@@ -84,18 +84,18 @@ class TestAlarmDispatcher(base.BaseTestCase):
         # test that the first response object has the required properties
         self.assertEqual(obj[0]['id'],
                          '1bcbe772-f12b-44ef-a1b5-7685baeaaba2')
-        self.assertNotEqual(obj[0]['alarm_definition'], None)
-        self.assertNotEqual(obj[0]['metrics'], None)
+        self.assertIsNotNone(obj[0]['alarm_definition'])
+        self.assertIsNotNone(obj[0]['metrics'])
         self.assertEqual(obj[0]['state'], 'OK')
-        self.assertNotEqual(obj[0]['sub_alarms'], None)
+        self.assertIsNotNone(obj[0]['sub_alarms'])
 
         # test that the second response object has the required properties
         self.assertEqual(obj[1]['id'],
                          '256acdac-2f05-4e3e-85a3-802055bf2863')
-        self.assertNotEqual(obj[1]['alarm_definition'], None)
-        self.assertNotEqual(obj[1]['metrics'], None)
+        self.assertIsNotNone(obj[1]['alarm_definition'])
+        self.assertIsNotNone(obj[1]['metrics'])
         self.assertEqual(obj[1]['state'], 'UNDETERMINED')
-        self.assertNotEqual(obj[1]['sub_alarms'], None)
+        self.assertIsNotNone(obj[1]['sub_alarms'])
         self.assertEqual(len(obj), 2)
 
     def test_do_get_alarms_by_id(self):
@@ -119,9 +119,9 @@ class TestAlarmDispatcher(base.BaseTestCase):
         # test that the response object has the required properties
         self.assertEqual(obj['id'],
                          "d718fb26-d16d-4705-8f02-13a1468619c9")
-        self.assertNotEqual(obj['metrics'], None)
+        self.assertIsNotNone(obj['metrics'])
         self.assertEqual(obj['state'], 'OK')
-        self.assertNotEqual(obj['sub_alarms'], None)
+        self.assertIsNotNone(obj['sub_alarms'])
         self.assertEqual(obj['created_timestamp'], '2015-06-17T18:43:21Z')
         self.assertEqual(obj['updated_timestamp'], '2015-06-17T18:43:27Z')
         self.assertEqual(obj['state_updated_timestamp'],

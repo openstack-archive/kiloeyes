@@ -59,7 +59,7 @@ class TestEmailSender(tests.BaseTestCase):
                                                ["hanc@andrew.cmu.edu", ],
                                                "Mocked email subject",
                                                "Mocked email content"))
-                                    self.assertEqual(ret, True)
+                                    self.assertTrue(ret)
 
     def testEmailSender_Failure(self):
         with mock.patch.object(smtplib.SMTP,
@@ -93,4 +93,4 @@ class TestEmailSender(tests.BaseTestCase):
                                                ["hanc@andrew.cmu.edu", ],
                                                "Mocked email subject",
                                                "Mocked email content"))
-                                    self.assertEqual(ret, False)
+                                    self.assertFalse(ret)
