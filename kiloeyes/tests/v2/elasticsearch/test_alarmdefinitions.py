@@ -104,7 +104,7 @@ class TestAlarmDefinitionDispatcher(base.BaseTestCase):
         self.assertEqual(obj[0]['severity'], "LOW")
         self.assertEqual(obj[0]['expression'],
                          "max(cpu.usage{os=linux},600)>15")
-        self.assertNotEqual(obj[0]['expression_data'], None)
+        self.assertIsNotNone(obj[0]['expression_data'])
         self.assertEqual(obj[0]['description'], "Max CPU 15")
 
         # test that the second response object has the required properties
@@ -121,7 +121,7 @@ class TestAlarmDefinitionDispatcher(base.BaseTestCase):
         self.assertEqual(obj[1]['severity'], "LOW")
         self.assertEqual(obj[1]['expression'],
                          "max(cpu.usage,60)>10 times 4")
-        self.assertNotEqual(obj[1]['expression_data'], None)
+        self.assertIsNotNone(obj[1]['expression_data'])
         self.assertEqual(obj[1]['description'],
                          "max CPU greater than 10")
         self.assertEqual(len(obj), 2)
