@@ -30,7 +30,7 @@ class TestAlarmExprCalculator(tests.BaseTestCase):
     def test_calc_value(self):
         self.assertEqual(0, calculator.calc_value('MAX', [0]))
         data = []
-        self.assertEqual(None, calculator.calc_value('MAX', data))
+        self.assertIsNone(calculator.calc_value('MAX', data))
         random.seed(time.time())
         for i in range(0, 30, 1):
             data.append(random.uniform(0, 1000))
