@@ -99,7 +99,7 @@ class KafkaConnection(object):
                     wait_time = self.wait_time
                 time.sleep(wait_time)
 
-                self._client = client.KafkaClient(self.uri)
+                self._client = client.SimpleClient(self.uri)
 
                 # when a client is re-initialized, existing consumer should be
                 # reset as well.
