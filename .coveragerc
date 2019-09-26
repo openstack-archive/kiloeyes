@@ -1,7 +1,0 @@
-[run]
-branch = True
-source = kiloeyes
-omit = kiloeyes/tests/*,kiloeyes/openstack/*
-
-[report]
-ignore_errors = True
